@@ -1,0 +1,67 @@
+@twitter-blue: #55acee;
+@text-color: #ccc;
+@bg-color: #444;
+@text-color-light: #ddd;
+
+html, body {
+    background: #333 url("../img/footer_lodyas.png") top left repeat;
+    font-weight: 100;
+}
+
+h1, h2, h3, h4 {
+    color: @text-color;
+    font-weight: 100 !important;   
+}
+
+#title {
+    font-family: serif;   
+}
+
+a:hover {
+    color: @twitter-blue !important; 
+    
+    i {
+       color: @twitter-blue !important;  
+    }
+}
+
+.navbar {
+   .navbar-header, .navbar-nav {
+        a {
+            color: @text-color-light !important;
+        }
+        
+        a:hover {
+            color: @twitter-blue !important;   
+        }
+    } 
+    
+    #navbar-icon {
+        width: 36px;
+        display: inline;
+        margin: -8px 10px 0 0;
+    }
+}
+
+.btn {
+    background-color: @bg-color;
+    i {
+       color: @text-color;
+} 
+    }
+
+.btn:hover {
+    background-color: @twitter-blue;
+    i {
+        color: @bg-color !important;
+    }
+}
+
+.well {
+    background-color: @bg-color;
+    border: none;
+}
+
+img {
+    width: 100%;   
+}

@@ -1,0 +1,53 @@
+html,
+body {
+  background: #333333 url("../img/footer_lodyas.png") top left repeat;
+  font-weight: 100;
+}
+h1,
+h2,
+h3,
+h4 {
+  color: #cccccc;
+  font-weight: 100 !important;
+}
+#title {
+  font-family: serif;
+}
+a:hover {
+  color: #55acee !important;
+}
+a:hover i {
+  color: #55acee !important;
+}
+.navbar .navbar-header a,
+.navbar .navbar-nav a {
+  color: #dddddd !important;
+}
+.navbar .navbar-header a:hover,
+.navbar .navbar-nav a:hover {
+  color: #55acee !important;
+}
+.navbar #navbar-icon {
+  width: 36px;
+  display: inline;
+  margin: -8px 10px 0 0;
+}
+.btn {
+  background-color: #444444;
+}
+.btn i {
+  color: #cccccc;
+}
+.btn:hover {
+  background-color: #55acee;
+}
+.btn:hover i {
+  color: #444444 !important;
+}
+.well {
+  background-color: #444444;
+  border: none;
+}
+img {
+  width: 100%;
+}
