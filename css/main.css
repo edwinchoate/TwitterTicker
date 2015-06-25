@@ -10,6 +10,9 @@ h4 {
   color: #cccccc;
   font-weight: 100 !important;
 }
+p {
+  color: #dddddd;
+}
 #title {
   font-family: serif;
 }
