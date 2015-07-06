@@ -51,6 +51,10 @@ a:hover i {
   background-color: #444444;
   border: none;
 }
+.stockTimelineChart {
+  background-color: #444444;
+  border: none;
+}
 img {
   width: 100%;
 }

@@ -11,14 +11,16 @@
         <meta name="keywords" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <!-- Bootstrap -->
+        
+        <!-- Bootstrap Core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+        <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Oxygen:300' rel='stylesheet' type='text/css'>
         
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-        
-        <link href="css/main.css" rel="stylesheet">
-        
+        <!-- Custom CSS -->
+        <link href="css/main.css" rel="stylesheet">        
     </head>
     <body>
         
@@ -57,7 +59,7 @@
                             <img src="img/TwitterTicker_logo.png" alt="TwitterTicker Logo">
                         </div>
                         <div class="col-lg-9 col-md-8 col-sm-6 col-xs-12">
-                            <h1 id="title"><i>"TwitterTicker"</i></h1>
+                            <h1 id="title"><i>TwitterTicker</i></h1>
                             <h4 class="lead">&#8212; A visualization that shows how your tweets make a difference in the stock market</h4>                      
                         </div>
                     </div>
@@ -77,11 +79,12 @@
         
         <!-- Actual Vis Goes Here! -->
         <div class="container">
-            
+
             <div class="row">
                 <div class="well well-lg">
                     <h4>This is where the actual vis will go. We can embed it here and clean up the front end here if necessary. I was also planning having instructions on how to operate the vis on the "Help" page once we're finished.</h4>
                 </div>
+                
             </div>
             
         </div>
@@ -89,7 +92,18 @@
         
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <!-- D3 (necessary dependent for NVD3.js) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
+
+        <link href="nvd3/build/nv.d3.min.css" rel="stylesheet">
+        <script src="nvd3/build/nv.d3.min.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $("#well").load("js/stockTimeline.html");
+            });
+        </script>
     </body>
 </html>
