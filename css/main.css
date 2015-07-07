@@ -12,14 +12,31 @@ h4 {
 }
 p {
   color: #dddddd;
+  font-size: 1.3em;
+  padding-bottom: 25px;
+}
+label {
+  color: #dddddd;
+  font-size: 1.15em;
+  font-weight: 100;
+  padding: 0 10px 0 15px;
+}
+main {
+  padding: 0 0 100px 0;
 }
 #title {
   font-family: serif;
 }
+a {
+  color: #55acee;
+}
 a:hover {
-  color: #55acee !important;
+  color: #83c3f3 !important;
 }
 a:hover i {
+  color: #55acee !important;
+}
+a:visited {
   color: #55acee !important;
 }
 .navbar .navbar-header a,
@@ -54,6 +71,14 @@ a:hover i {
 img {
   width: 100%;
 }
+.img-circle {
+  width: 75%;
+  display: block;
+  margin: 0 auto 0 auto;
+}
+.circle-label {
+  padding-bottom: 50px;
+}
 #chart,
 svg {
   height: 100%;
@@ -61,7 +86,37 @@ svg {
   width: 100%;
   margin: 0;
   padding: 0;
-}
-svg {
   display: block;
+  color: red;
+  background-color: #373737;
+}
+#chart text,
+svg text {
+  fill: #999999;
+  font-family: "Helvetica", "Arial";
+  font-weight: 200;
+}
+#chart line,
+svg line {
+  stroke: #666666;
+}
+#chart rect,
+svg rect {
+  fill: #666666;
+}
+#chart rect.extent,
+svg rect.extent {
+  stroke-width: 1px;
+  stroke: #e6e6e6;
+}
+@media (max-width: 768px) {
+  #chart,
+  svg {
+    min-height: 200px;
+  }
+}
+#company-selector {
+  overflow-y: scroll;
+  max-height: 250px;
+  overflow: -moz-scrollbars-vertical;
 }

@@ -1,9 +1,4 @@
-<div id="chart" class='with-3d-shadow with-transitions'>
-    <svg></svg>
-</div>
-
-<script>
-
+function loadStockTimeline () {
     nv.addGraph(function() {
         var chart = nv.models.lineWithFocusChart();
 
@@ -34,5 +29,4 @@
             };
         });
     }
-
-</script>
+}

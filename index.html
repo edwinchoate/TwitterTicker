@@ -23,6 +23,7 @@
         <script src="nvd3/build/nv.d3.min.js"></script>
         <link href="nvd3/build/nv.d3.css" rel="stylesheet" type="text/css">
         <script src="nvd3/examples/lib/stream_layers.js"></script>
+        <script src="js/stockTimeline.js"> </script>
         
         <!-- Custom CSS -->
         <link href="css/main.css" rel="stylesheet">        
@@ -56,55 +57,70 @@
         </nav>
         
         
-        <div id="intro-pane" class="container collapse in">
-            <div>
-                <div class="row">
-                    <div class="col-xs-10 col-xs-offset-1">
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <img src="img/TwitterTicker_logo.png" alt="TwitterTicker Logo">
-                        </div>
-                        <div class="col-lg-9 col-md-8 col-sm-6 col-xs-12">
-                            <h1 id="title"><i>TwitterTicker</i></h1>
-                            <h4 class="lead">&#8212; A visualization that shows how your tweets make a difference in the stock market</h4>                      
+        <main>
+        
+            <div id="intro-pane" class="container collapse in">
+                <div>
+                    <div class="row">
+                        <div class="col-xs-10 col-xs-offset-1">
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <img src="img/TwitterTicker_logo.png" alt="TwitterTicker Logo">
+                            </div>
+                            <div class="col-lg-9 col-md-8 col-sm-6 col-xs-12">
+                                <h1 id="title"><i>TwitterTicker</i></h1>
+                                <h4 class="lead">&#8212; A visualization that shows how your tweets make a difference in the stock market</h4>                      
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        
-        <div class="container">
-            <div class="row text-center">
-                <a class="btn" role="button" data-toggle="collapse" data-target="#intro-pane"></a>
-            </div>
-        </div>
-        
-        <br>
-        
-        
-        <!-- Actual Vis Goes Here! -->
-        <div class="container">
 
-            <div class="row">
-                <div class="well well-lg">
-                    
-                    <div id="stock-timeline"></div>
-                    
+
+            <div class="container">
+                <div class="row text-center">
+                    <a class="btn" role="button" data-toggle="collapse" data-target="#intro-pane"></a>
                 </div>
-                
             </div>
+
+            <br>
+
+
+            <!-- Actual Vis Goes Here! -->
+            <div class="container">
+
+                <div class="row">
+                    <!-- The grey pane that wraps the whole vis -->
+                    <div class="well well-lg">
+                        
+                        <div class="row">
+                            <!-- Select Companies pane -->
+                            <div class="col-sm-3 col-xs-12">
+                                <h3>Select Companies</h3>
+                                <form id="company-selector"></form>
+                            </div>
+                            <!-- Stock Timeline part of the vis -->
+                            <div class="col-sm-9 col-xs-12">
+                                <div id="chart">
+                                    <svg></svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- End of vis -->
             
-        </div>
-        <!-- End of vis -->
+        </main>
+        
         
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                $("#stock-timeline").load("js/stockTimeline.html");
-            });
-        </script>
+        <script src="js/twitterTicker.js"></script>
     </body>
 </html>
