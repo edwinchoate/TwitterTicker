@@ -23,6 +23,8 @@ $(document).ready(function () {
     console.log("DATA FROM COMPANIES", data);
     // load up the Stock Timeline D3
     $.getScript("js/stockTimeline.js", loadStockTimeline(data));
+    // load up the Tweets View D3
+    $.getScript("js/tweetsView.js", loadTweetsView());
 });
 
 var parseStockData = function(selectedCompaniesList)
@@ -41,3 +43,4 @@ var parseStockData = function(selectedCompaniesList)
     });
     return stocks;
 }
+

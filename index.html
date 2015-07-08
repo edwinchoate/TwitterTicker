@@ -23,7 +23,6 @@
         <script src="nvd3/build/nv.d3.min.js"></script>
         <link href="nvd3/build/nv.d3.css" rel="stylesheet" type="text/css">
         <script src="nvd3/examples/lib/stream_layers.js"></script>
-        <script src="js/stockTimeline.js"> </script>
         
         <!-- Custom CSS -->
         <link href="css/main.css" rel="stylesheet">        
@@ -106,7 +105,25 @@
                             </div>
                         </div>
                         
+                    </div>
 
+                    <!-- The grey pane that wraps the whole vis -->
+                    <div class="well well-lg">
+                        
+                        <div class="row">
+                            <!-- Select Companies pane -->
+                            <div class="col-sm-3 col-xs-12">
+                                <h3>View Options</h3>
+                                <form id="company-selector"></form>
+                            </div>
+                            <!-- Stock Timeline part of the vis -->
+                            <div class="col-sm-9 col-xs-12">
+                                <div id="tweetsView">
+
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
 
                 </div>
@@ -122,5 +139,7 @@
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
         <script src="js/twitterTicker.js"></script>
+        <script src="js/stockTimeline.js"> </script>
+        <script src="js/tweetsView.js"> </script>
     </body>
 </html>
