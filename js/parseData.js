@@ -1,4 +1,4 @@
-var parseStockData = function(selectedCompaniesArray)
+var parse_StockData = function(selectedCompaniesArray)
 {
     var parse = d3.time.format("%m/%d/%Y").parse;
     for(company in selectedCompaniesArray) {
