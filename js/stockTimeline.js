@@ -1,4 +1,5 @@
 function loadStockTimeline (data) {
+	console.log("DATA", data);
     nv.addGraph(function() {
         var chart = nv.models.lineWithFocusChart()
                     .useInteractiveGuideline(true)
@@ -20,7 +21,7 @@ function loadStockTimeline (data) {
         chart.yAxis.axisLabel("Stock Price ($USD)")
                    .tickFormat(function(d,i){ return '$' + d3.format(',.1f')(d); });
         chart.y2Axis.tickFormat(d3.format(',.1f'));
-        chart.legend.vers('furious');
+        //chart.legend.vers('furious');
         d3.select('#chart svg')
             .datum(data)
             .call(chart)

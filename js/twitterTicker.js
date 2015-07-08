@@ -1,46 +1,70 @@
 var stockFinalData = [];
 var currentNumberOfCompanies = 0;
 var maxNumCompanies = 5;
+    var selectedCompanies = [];
 
 $(document).ready(function () {
     
     var selected = false;
-    var companies = ["Amazon", "Apple", "Ford", "Intel", "McDonald's", "Microsoft",
-                    "Amazon", "Apple", "Ford", "Intel", "McDonald's", "Microsoft",
-                    "Amazon", "Apple", "Ford", "Intel", "McDonald's", "Microsoft",
-                    "Amazon", "Apple", "Ford", "Intel", "McDonald's", "Microsoft"];
+    var companies = ["Amazon", "Apple", "Facebook", "Intel", "IBM", "Microsoft", "Google"];
+
     loadCompanies(companies);
+    $("#company-selector").on("click", "g", handleSelection);
 
     // load companies into selector pane
     function loadCompanies (companiesArray) {
         var companyForm = $("#company-selector");
         for (company in companiesArray) {
-            companyForm.append("<input type=\"radio\"><label>" + companiesArray[company] + "</label><br>");
+            var currentCompany = companiesArray[company];
+            companyForm.append("<g id=\"" + currentCompany + "-input\"><input type=\"checkbox\" id=\"" +
+                               currentCompany + 
+                               "\"><label for=\"" + currentCompany + "\">" + 
+                               currentCompany + "</label></g><br>");
         }
     }
 
-    //Select specific companies based on which radio button is selected
-    //Store them into the selectedCompanies list below
-    var selectedCompanies = ["Apple", "Amazon"];
-    currentNumberOfCompanies = stockFinalData.length;
-    
-    /*//need to maintain a list of this data
-    //data should just be accessible if it's already been added. Don't want to add it if stockFinalData already contains it
-    for(var i = 0; i < stockFinalData.length; i++) {
-        for(var j = 0; j < selectedCompanies.length; j++) {
-            key = selectedCompanies[j];
-            if(selectedCompanies.contains(key) && !stockFinalData[i].contains(key) && currentNumberOfCompanies < 5) {
-                parseStockData(selectedCompanies[i], index);
-            }
-            else if(selectedCompanies.contains(key) && !stockFinalData[i].contains(key) && currentNumberOfCompanies == 5){
-                alert("You cannot add more than 5 companies! Please unselect one first");
-            }
+    // handle selection of companies
+    function handleSelection () {
+        var currentCompany = $(this).find("label");
+        var currentCompanyName = currentCompany.attr("for").toString();
+        
+        console.log("CURRENTCOMPANY", currentCompany);
+        if(currentCompany.hasClass("selected")) {
+            var index = selectedCompanies.indexOf(currentCompanyName);
+            currentCompany.removeClass("selected");
+            selectedCompanies.splice(index, 1);   
+            removeCompany(currentCompanyName);
+
+        } else if(currentNumberOfCompanies < 5) {
+            selectedCompanies.push(currentCompany.attr("for").toString());
+            var index = selectedCompanies.indexOf(currentCompanyName);
+            console.log(index);
+            addCompany(currentCompanyName, index);
+            currentCompany.addClass("selected");
         }
-    } */
-    for(var i = 0; i < selectedCompanies.length; i++) {
-        parseStockData(selectedCompanies[i], i);
+        else {
+            alert("You can't add another company. Please remove one company from the listing.");
+        }
     }
-});
+
+ });
+
+function addCompany(companyName, index) {
+    parseStockData(companyName, index);
+    currentNumberOfCompanies = stockFinalData.length;
+}
+
+function removeCompany(companyName) {
+    for(var i = 0; i < stockFinalData.length; i++) {
+        console.log("STOCK FINAL DATA", stockFinalData[i]);
+        if(jQuery.inArray(companyName, selectedCompanies) == -1 && jQuery.inArray(companyName, stockFinalData[i]) >= 0  && currentNumberOfCompanies < 5) {
+            console.log("IM IN HERE", stockFinalData[i]);
+            stockFinalData.splice(i, 1);
+        }
+    }
+    loadStockTimeline(stockFinalData);
+    currentNumberOfCompanies = stockFinalData.length;
+}
 
 function parseStockData(companyName, index)
 {
