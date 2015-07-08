@@ -1,3 +1,7 @@
+var stockFinalData = [];
+var currentNumberOfCompanies = 0;
+var maxNumCompanies = 5;
+
 $(document).ready(function () {
     
     var selected = false;
@@ -17,27 +21,45 @@ $(document).ready(function () {
 
     //Select specific companies based on which radio button is selected
     //Store them into the selectedCompanies list below
-    var selectedCompanies = ["Apple"];
-    console.log("SELECTED COMPANIES", selectedCompanies);
-    var data = parseStockData(selectedCompanies);
-    console.log("DATA FROM COMPANIES", data);
-    // load up the Stock Timeline D3
-    $.getScript("js/stockTimeline.js", loadStockTimeline(data));
+    var selectedCompanies = ["Apple", "Amazon"];
+    currentNumberOfCompanies = stockFinalData.length;
+    
+    /*//need to maintain a list of this data
+    //data should just be accessible if it's already been added. Don't want to add it if stockFinalData already contains it
+    for(var i = 0; i < stockFinalData.length; i++) {
+        for(var j = 0; j < selectedCompanies.length; j++) {
+            key = selectedCompanies[j];
+            if(selectedCompanies.contains(key) && !stockFinalData[i].contains(key) && currentNumberOfCompanies < 5) {
+                parseStockData(selectedCompanies[i], index);
+            }
+            else if(selectedCompanies.contains(key) && !stockFinalData[i].contains(key) && currentNumberOfCompanies == 5){
+                alert("You cannot add more than 5 companies! Please unselect one first");
+            }
+        }
+    } */
+    for(var i = 0; i < selectedCompanies.length; i++) {
+        parseStockData(selectedCompanies[i], i);
+    }
 });
 
-var parseStockData = function(selectedCompaniesList)
+function parseStockData(companyName, index)
 {
-    var stocks = []; 
-    selectedCompaniesList.map(function(company) {
-        d3.csv("data/AAPL.csv", function(pricesData)
-        {
-            //pricesData is an array of json objects containing the data in from the csv
-            var stockDataByCompany = new Object();
-            stockDataByCompany.company = company;
-            stockDataByCompany.stockPrices = pricesData;
-            stocks.push(stockDataByCompany);
-            console.log("NEWDATA", stockDataByCompany);
+    d3.csv("data/" +companyName+".csv", function(pricesData)
+    {
+        //pricesData is an array of json objects containing the data in from the csv
+        var stockDataByCompany = new Object();
+        stockDataByCompany.key = companyName;
+        //console.log("PRICES DATA: ", pricesData.close);
+
+        var stockDataToNum = pricesData.map(function(d) {
+            var stockTime = +d.date;
+            var stockClosing = +d.close;
+            return [stockTime, stockClosing];
         });
+
+        stockDataByCompany.values = stockDataToNum;
+        stockFinalData[index] = stockDataByCompany;
+        console.log(stockFinalData);
+        $.getScript("js/stockTimeline.js", loadStockTimeline(stockFinalData));
     });
-    return stocks;
 }
