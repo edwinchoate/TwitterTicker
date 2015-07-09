@@ -57,51 +57,36 @@ $(document).ready(function () {
         var currentCompany = $(this).find("label");
         var currentCompanyName = currentCompany.attr("for").toString();
         
-        //console.log("CURRENTCOMPANY", currentCompany);
         if(currentCompany.hasClass("selected")) {
             var index = selectedCompanies.indexOf(currentCompanyName);
             currentCompany.removeClass("selected");
             selectedCompanies.splice(index, 1);   
-            removeCompany(currentCompanyName);
+            removeCompany(currentCompanyName, index);
 
-        } else if(currentNumberOfCompanies < 5) {
-            //console.log("IM FRIGGIN HERE");
+        } else {
             selectedCompanies.push(currentCompany.attr("for").toString());
-            //console.log("OMG IJUST ADDED COMPANY", currentCompany.attr("for").toString());
             var index = selectedCompanies.indexOf(currentCompanyName);
-            //console.log("INDEX: ", index);
             addCompany(currentCompanyName, index);
-            //console.log("ADDED A COMPANY: ", currentCompany);
             currentCompany.addClass("selected");
-        }
-        else {
-            alert("You can't add another company. Please remove one company from the listing.");
         }
     }
     $.getScript("js/tweetsView.js", loadTweetsView());
  });
 
 function addCompany(companyName, index) {
-        //console.log("ADDING A COMPANY");
+    console.log("Adding " + companyName + " to Stock Timeline...");
     if(currentNumberOfCompanies == 0) {
-        //console.log("NUMBER OF COMPANIES IS 0");
         parseStockData(companyName, index);
     }
     else {
-        //console.log("NUMBER OF COMPANIES IS NOT 0");
         updateStockData(companyName, index);
     }
     
 }
 
-function removeCompany(companyName) {
-    for(var i = 0; i < stockFinalData.length; i++) {
-        //console.log("STOCK FINAL DATA", stockFinalData[i]);
-        if(jQuery.inArray(companyName, selectedCompanies) == -1 && jQuery.inArray(companyName, stockFinalData[i]) >= 0  && currentNumberOfCompanies < 5) {
-            //console.log("IM IN HERE", stockFinalData[i]);
-            stockFinalData.splice(i, 1);
-        }
-    }
+function removeCompany(companyName, index) {
+    console.log("Removing " + companyName + " from Stock Timeline...");
+    stockFinalData.splice(index, 1);
     loadStockTimeline(stockFinalData);
     currentNumberOfCompanies = stockFinalData.length;
 }
@@ -113,7 +98,6 @@ function parseStockData(companyName, index)
         //pricesData is an array of json objects containing the data in from the csv
         var stockDataByCompany = new Object();
         stockDataByCompany.key = companyName;
-        ////console.log("PRICES DATA: ", pricesData.close);
 
         var stockDataToNum = pricesData.map(function(d) {
             var stockTime = +d.date;
@@ -123,16 +107,11 @@ function parseStockData(companyName, index)
 
         stockDataByCompany.values = stockDataToNum;
         stockFinalData[index] = stockDataByCompany;
-        //console.log("PARSE STOCK DATA", stockFinalData);
 
         minDate = stockFinalData[0].values[0][0];
         maxDate = stockFinalData[0].values[stockFinalData[0].values.length - 1][0];
-        //console.log("MINDATE FIRST", minDate);
-        //console.log("MAXDATE FIRST", maxDate);
         loadStockTimeline(stockFinalData);
-        //console.log("PREVIOUS NUMBER OF COMPANIES: ", currentNumberOfCompanies);
         currentNumberOfCompanies = stockFinalData.length;
-        //console.log("CURRENT NUMBER OF COMPANIES: ", currentNumberOfCompanies);
 
     });
 }
@@ -144,7 +123,6 @@ function updateStockData(companyName, index)
         //pricesData is an array of json objects containing the data in from the csv
         var stockDataByCompany = new Object();
         stockDataByCompany.key = companyName;
-        ////console.log("PRICES DATA: ", pricesData.close);
 
         var stockDataToNum = pricesData.map(function(d) {
             var stockTime = +d.date;
@@ -153,11 +131,8 @@ function updateStockData(companyName, index)
 
         });
         
-        //console.log("MINDATE", minDate);
-        //console.log("MAXDATE", maxDate);
         stockDataByCompany.values = stockDataToNum;
         stockFinalData[index] = stockDataByCompany;
-        //console.log("PARSE STOCK DATA", stockFinalData);
         
         var companyMinDate = stockFinalData[index].values[0][0];
         var companyMaxDate = stockFinalData[0].values[stockFinalData[0].values.length - 1][0];
@@ -171,14 +146,11 @@ function updateStockData(companyName, index)
         
         chartData.datum(stockFinalData).call(chart);
         nv.utils.windowResize(chart.update);
-        //console.log("PREVIOUS NUMBER OF COMPANIES: ", currentNumberOfCompanies);
         currentNumberOfCompanies = stockFinalData.length;
-        //console.log("CURRENT NUMBER OF COMPANIES: ", currentNumberOfCompanies);
     });
 }
 
 function loadStockTimeline (data) {
-    //console.log("DATA", data);
     nv.addGraph(function() {
 
         chart = nv.models.lineWithFocusChart()
@@ -202,7 +174,7 @@ function loadStockTimeline (data) {
                    .tickFormat(function(d,i){ return '$' + d3.format(',.1f')(d); });
         chart.y2Axis.tickFormat(d3.format(',.1f'));
 
-        chart.legend = legend; 
+        //chart.legend.vers('furious');
 
 
         chartData = d3.select('#chart svg').datum(data);
