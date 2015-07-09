@@ -36,7 +36,7 @@ $(document).ready(function () {
             removeCompany(currentCompanyName);
 
         } else if(currentNumberOfCompanies < 5) {
-            selectedCompanies.push(currentCompany.attr("for").toString());
+            selectedCompanies.push(currentCompanyName);
             var index = selectedCompanies.indexOf(currentCompanyName);
             console.log(index);
             addCompany(currentCompanyName, index);
@@ -84,7 +84,6 @@ function parseStockData(companyName, index)
         stockDataByCompany.values = stockDataToNum;
         stockFinalData[index] = stockDataByCompany;
         console.log(stockFinalData);
-        $.getScript("js/stockTimeline.js", loadStockTimeline(stockFinalData));
+        $.getScript("js/stockTimeline.js", loadStockTimeline(stockFinalData));    
     });
 }
-
