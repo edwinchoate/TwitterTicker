@@ -7,6 +7,31 @@ var chartData;
 var minDate;
 var maxDate; 
 
+/* Creates legend and companies list for function */
+function companiesFunction() {
+        return [
+            {key: "Amazon"},
+            {key: "Apple"},
+            {key: "Facebook"},
+            {key: "Intel"},
+            {key: "IBM"},
+            {key: "Microsoft"},
+            {key: "Google"},
+        ];
+    }
+
+var legend = nv.models.legend().vers('furious').height(100).padding(180);
+
+d3.select('#companySelectionLegend')
+    .attr('height', 50)
+    .datum(companiesFunction()).call(legend);
+
+legend.dispatch.on('stateChange', function(d) {
+    console.log(d);
+    d3.select('#companySelectionLegend').call(legend);
+});
+
+
 $(document).ready(function () {
     
     var selected = false;
@@ -177,7 +202,9 @@ function loadStockTimeline (data) {
                    .tickFormat(function(d,i){ return '$' + d3.format(',.1f')(d); });
         chart.y2Axis.tickFormat(d3.format(',.1f'));
 
-        chart.legend.vers('furious');
+        chart.legend = legend; 
+
+
         chartData = d3.select('#chart svg').datum(data);
         chartData.call(chart);
 
