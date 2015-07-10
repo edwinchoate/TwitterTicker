@@ -7,30 +7,6 @@ var chartData;
 var minDate;
 var maxDate; 
 
-/* Creates legend and companies list for function */
-function companiesFunction() {
-        return [
-            {key: "Amazon"},
-            {key: "Apple"},
-            {key: "Facebook"},
-            {key: "Intel"},
-            {key: "IBM"},
-            {key: "Microsoft"},
-            {key: "Google"},
-        ];
-    }
-
-var legend = nv.models.legend().vers('furious').height(100).padding(180);
-
-d3.select('#companySelectionLegend')
-    .attr('height', 50)
-    .datum(companiesFunction()).call(legend);
-
-legend.dispatch.on('stateChange', function(d) {
-    console.log(d);
-    d3.select('#companySelectionLegend').call(legend);
-});
-
 
 $(document).ready(function () {
     
@@ -38,36 +14,42 @@ $(document).ready(function () {
     var companies = ["Amazon", "Apple", "Facebook", "Intel", "IBM", "Microsoft", "Google"];
 
     loadCompanies(companies);
-    $("#company-selector").on("click", "g", handleSelection);
+    $("#company-selector").on("click", "g input", handleSelection);
+    
+    // horizontal line seperating selected/not-selected companies
+    
 
     // load companies into selector pane
     function loadCompanies (companiesArray) {
         var companyForm = $("#company-selector");
+        
         for (company in companiesArray) {
             var currentCompany = companiesArray[company];
             companyForm.append("<g id=\"" + currentCompany + "-input\"><input type=\"checkbox\" id=\"" +
                                currentCompany + 
                                "\"><label for=\"" + currentCompany + "\">" + 
-                               currentCompany + "</label></g><br>");
+                               currentCompany + "</label><br></g>");
         }
     }
 
     // handle selection of companies
     function handleSelection () {
-        var currentCompany = $(this).find("label");
+        var currentCompany = $(this).closest("g").find("label");
         var currentCompanyName = currentCompany.attr("for").toString();
+        console.log("currentCompany:", currentCompany);
         
         if(currentCompany.hasClass("selected")) {
             var index = selectedCompanies.indexOf(currentCompanyName);
             currentCompany.removeClass("selected");
             selectedCompanies.splice(index, 1);   
             removeCompany(currentCompanyName, index);
-
+            $(this).closest("g").prependTo("#unselected-container");
         } else {
             selectedCompanies.push(currentCompany.attr("for").toString());
             var index = selectedCompanies.indexOf(currentCompanyName);
             addCompany(currentCompanyName, index);
             currentCompany.addClass("selected");
+            $(this).closest("g").prependTo("#selected-container");
         }
     }
     $.getScript("js/tweetsView.js", loadTweetsView());
