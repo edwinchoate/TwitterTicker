@@ -115,16 +115,47 @@
                     <div class="well well-lg">
                         
                         <div class="row">
-                            <!-- Select Companies pane -->
+                            <!-- View Selection Pane -->
                             <div class="col-sm-3 col-xs-12">
                                 <h3>View Options</h3>
-                                <form id="mode-selector">
+                                <form id="view-mode-selector">
+                                    <g id="magnet-input">
+                                        <input type="radio" id="magnet" name="view-mode" checked>
+                                        <label for="magnet">Magnet View</label><br>
+                                    </g>
+                                    <g id="senti-input">
+                                        <input type="radio" id="senti" name="view-mode">
+                                        <label for="senti">Sentiment vs Quality</label><br>
+                                    </g>
+                                    <g id="cluster-input">
+                                        <input type="radio" id="cluster" name="view-mode">
+                                        <label for="cluster">Cluster View</label><br>
+                                    </g>
+                                </form>
+                                <h3>Filter Keywords</h3>
+                                <form id="filter-mode-selector">
+                                    <g id="hashtags-input">
+                                        <input type="checkbox" id="hashtags" checked>
+                                        <label class="selected" for="hashtags"># Hashtags</label><br>
+                                    </g>
+                                    <g id="handles-input">
+                                        <input type="checkbox" id="handles" checked>
+                                        <label class="selected" for="handles">@ Handles</label><br>
+                                    </g>
+                                    <g id="links-input">
+                                        <input type="checkbox" id="links" checked>
+                                        <label class="selected" for="links">Links</label><br>
+                                    </g>
+                                    <g id="keywords-input">
+                                        <input type="checkbox" id="keywords" checked>
+                                        <label class="selected" for="keywords">Other Keywords</label><br>
+                                    </g>
                                 </form>
                             </div>
-                            <!-- Stock Timeline part of the vis -->
+                            <!-- Twitter Bubble part of the vis -->
                             <div class="col-sm-9 col-xs-12">
                                 <div id="tweetsView">
-
+                                    
                                 </div>
                             </div>
                         </div>

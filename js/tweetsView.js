@@ -116,3 +116,7 @@ function loadTweetsView () {
 	}
 
 }
+
+
+
+// TODO updateTweetsView() 

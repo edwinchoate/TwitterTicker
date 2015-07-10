@@ -5,7 +5,13 @@ var selectedCompanies = [];
 var selectedModeTag;
 var selectedModeName;
 
-var viewModes = [];
+/*
+    viewMode represents one of three modes:
+    0 - RelaTweeter View
+    1 - SentiMagnets View
+    2 - Cluster View 
+*/
+var viewMode = 0; 
 var companies = [];
 
 var chart;
@@ -22,13 +28,15 @@ var NO_TWITTER_VIEW_SELECTED = "No Twitter View Selected";
 $(document).ready(function () {
     
     companies = ["Amazon", "Apple", "Facebook", "Intel", "IBM", "Microsoft", "Google"];
-    viewModes = ["RelaTweeter View", "SentiMagnets View", "Cluster View"];
 
     loadCompanies(companies);
-    loadModes(viewModes);
+    $.getScript("js/tweetsView.js", loadTweetsView);
 
     $("#company-selector").on("click", "g input", handleCompanySelection);
-    $("#mode-selector").on("click", "g", handleModeSelection);
+    $("#view-mode-selector").on("click", "g input", handleViewModeSelection);
+    $("#filter-mode-selector").on("click", "g input", handleFilterModeSelection);
+    
+    
 
     // horizontal line seperating selected/not-selected companies
     
@@ -45,24 +53,10 @@ $(document).ready(function () {
         }
     }
 
-    // load modes into mode selector pane
-    function loadModes (viewModesArray) {
-        var modeForm = $("#mode-selector");
-
-        for (mode in viewModesArray) {
-            var currentModeTag = viewModesArray[mode];
-            modeForm.append("<g id=\"" + currentModeTag + "-input\"><input type=\"checkbox\" id=\"" +
-                               currentModeTag + 
-                               "\"><label for=\"" + currentModeTag + "\">" + 
-                               currentModeTag + "</label></g><br>");
-        }
-    }
-
     // handle selection of companies
     function handleCompanySelection () {
         var currentCompany = $(this).closest("g").find("label");
         var currentCompanyName = currentCompany.attr("for").toString();
-        console.log("currentCompany:", currentCompany);
         
         if(currentCompany.hasClass("selected")) {
             var index = selectedCompanies.indexOf(currentCompanyName);
@@ -80,18 +74,31 @@ $(document).ready(function () {
     }
 
     //handle mode selection
-    function handleModeSelection() {
-        $('input.mode-selector').not(this).prop('checked', false);
-        if(currentNumberOfCompanies > 0) {
-            var currentModeTag = $(this).find("label");
-            console.log("CURRENT MODE", currentModeTag);
-            var currentModeName = currentModeTag.attr("for").toString();
-            selectedModeName = currentModeName;
-            console.log("CURRENT MODE NAME", currentModeName);
-            displayTwitterVis();
+    function handleViewModeSelection() {
+        var currentViewMode = $(this).closest("g").find("label").attr("for");
+        
+        if (currentViewMode === "magnet") {
+            viewMode = 0;
+            console.log("Magnet View was selected... (viewMode=" + viewMode + ")");
+        } else if (currentViewMode === "senti") {
+            viewMode = 1;
+            console.log("Sentiment View was selected... (viewMode=" + viewMode + ")");
+        } else if (currentViewMode === "cluster") {
+            viewMode = 2;
+            console.log("Cluster View was selected... (viewMode=" + viewMode + ")");
         }
-        else {
-            alert("Please choose a company to view first!");
+        displayTwitterVis();
+    }
+    
+    function handleFilterModeSelection () {
+        var currentFilterMode = $(this).closest("g").find("label");
+        
+        if (currentFilterMode.hasClass("selected")) {
+            currentFilterMode.removeClass("selected");
+            console.log(currentFilterMode.text() + " was deselected...");
+        } else {
+            currentFilterMode.addClass("selected");
+            console.log(currentFilterMode.text() + " was selected...");
         }
     }
  });
@@ -194,18 +201,20 @@ function loadStockTimeline (data) {
 }
 
 function displayTwitterVis() {
-    if(selectedModeName.toUpperCase() === viewModes[0].toUpperCase()) {
-        $.getScript("js/tweetsView.js", loadTweetsView());
-        console.log("SHOWING YOU", viewModes[0]);
+    
+    // Display Tweets based on currently selected mode
+    switch (viewMode) {
+        case 0: // RelaTweeter View
+            
+            break;
+        case 1: // Sentimagnets View
+            
+            break;
+        case 2: // Cluster View
+            
+            break;
     }
-    else if(selectedModeName.toUpperCase() === viewModes[1].toUpperCase()) {
-        //$.getScript("js/tweetsView.js", loadTweetsView());
-        console.log("SHOWING YOU ", viewModes[1]);
-    }
-    else if(selectedModeName.toUpperCase() === viewModes[2].toUpperCase()) {
-        //$.getScript("js/tweetsView.js", loadTweetsView());
-        console.log("SHOWING YOU", viewModes[2]);
-    }
+
 }
 
 
