@@ -7,7 +7,7 @@ import java.util.*;
 
 ControlP5 cp5;
 color background_color = color(86, 106, 117);
-String filename = "Apple";
+String filename = "Google";
 
 Table dates_table;
 Table analysis_table;
@@ -68,7 +68,7 @@ void select_dates_file(){
 void process_dates_file(File selection){
   //give the file to the data-object, get back the path from it.
   if(selection != null){
-    dates_table = loadTable(selection.getAbsolutePath(), "csv");
+    dates_table = loadTable(selection.getAbsolutePath(), "header");
   }
 }
 
@@ -82,7 +82,7 @@ void select_analysis_file(){
 void process_analysis_file(File selection){
   //give the file to the data-object, get back the path from it.
   if(selection != null){
-    analysis_table = loadTable(selection.getAbsolutePath(), "csv");
+    analysis_table = loadTable(selection.getAbsolutePath(), "header");
   }
 }
 
@@ -90,21 +90,21 @@ void process_analysis_file(File selection){
   Does the Scraping of both files, outputting a combined file
 **********************************************************/
 void scrape(){
-//  if(dates_table == null){
-//    println("No dates file selected!");
-//    return;
-//  }
-//  if(analysis_table == null){
-//    println("No analysis file selected!");
-//    return;
-//  }
-  
+ if(dates_table == null){
+   println("No dates file selected!");
+   return;
+ }
+ if(analysis_table == null){
+   println("No analysis file selected!");
+   return;
+ }
+ 
   int new_table_index = 1;
   int dates_index = 1;
-  String previous_ID = analysis_table.getString(1, 0);
-
+  String previous_ID = analysis_table.getString(1, "ID");
+  println("50% weed");
   for(int i = 1; i < analysis_table.getRowCount (); i++){
-    
+     println("OH MY GORD" + i);
     //check the ID. if different from prev, new date, increase dates index
     String current_ID = analysis_table.getString(i, 0);
     if(!current_ID.equals(previous_ID)){
@@ -113,25 +113,25 @@ void scrape(){
     }
     
     //check the phrase. if present, record phrase in new table
-    String current_phrase = analysis_table.getString(i, 11);
+    String current_phrase = analysis_table.getString(i, "Phrase");
     if(!current_phrase.equals("")){
-      String phrase_sentiment =  analysis_table.getString(i, 12); 
+      String phrase_sentiment =  analysis_table.getString(i, "Phrase Sentiment"); 
       record_keyword(new_table_index, dates_index, i, current_phrase, "phrase", phrase_sentiment );
       new_table_index++;
     }
     
     //check the entity. if present, record this too
-    String current_entity = analysis_table.getString(i, 15);
+    String current_entity = analysis_table.getString(i, "Entity");
     if(!current_entity.equals("")){
-      String entity_sentiment =  analysis_table.getString(i, 17); 
+      String entity_sentiment =  analysis_table.getString(i, "Entity Sentiment"); 
       record_keyword(new_table_index, dates_index, i, current_entity, "entity", entity_sentiment);
       new_table_index++;
     }
     
     //check the theme. if present, record this too
-    String current_theme = analysis_table.getString(i, 20);
+    String current_theme = analysis_table.getString(i, "Theme");
     if(!current_theme.equals("")){
-      String theme_sentiment =  analysis_table.getString(i, 21); 
+      String theme_sentiment =  analysis_table.getString(i, "Theme Sentiment"); 
       record_keyword(new_table_index, dates_index, i, current_theme, "theme", theme_sentiment);
       new_table_index++;
     }
@@ -145,19 +145,19 @@ void scrape(){
 
 void record_keyword(int new_table_index, int dates_index, int analysis_index, String keyword, String type, String sentiment){
   // Get Date
-  String date = dates_table.getString(dates_index, 0);
+  String date = dates_table.getString(dates_index, "Date (GMT)");
      
   // Get ID
-  String id = analysis_table.getString(analysis_index, 0);
+  String id = analysis_table.getString(analysis_index, "ID");
   
   // Get Tweet
-  String text = dates_table.getString(dates_index, 3);
+  String text = dates_table.getString(dates_index, "Text");
   
   // Get Retweets
-  String rts = dates_table.getString(dates_index, 7);
+  String rts = dates_table.getString(dates_index, "Retweet count");
   
   // Get Favs
-  String favs = dates_table.getString(dates_index, 8);
+  String favs = dates_table.getString(dates_index, "Favorite count");
 
 
   // Write everything to the csv
