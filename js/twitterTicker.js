@@ -136,7 +136,7 @@ function loadStockData(companyName, index, pricesData) {
 
 function initializeStockTimeline(companyName, index)
 {
-    d3.csv("data/" +companyName+".csv", function(pricesData)
+    d3.csv("data/" +companyName+"_stock.csv", function(pricesData)
     {
         loadStockData(companyName, index, pricesData);
 
@@ -151,7 +151,7 @@ function initializeStockTimeline(companyName, index)
 
 function updateStockTimeline(companyName, index)
 {
-    d3.csv("data/" +companyName+".csv", function(pricesData)
+    d3.csv("data/" +companyName+"_stock.csv", function(pricesData)
     {
         loadStockData(companyName, index, pricesData);
         

@@ -5,11 +5,11 @@ function initializeTweetView(companyName, index)
 {
 	index = 0;
 	companyName = "Amazon";
-    d3.csv("data/" +companyName+".csv", function(tweetsData)
+    d3.csv("data/twitter/" +companyName+"_twitter.csv", function(tweetsData)
     {
         loadTweetData(companyName, index, tweetsData);
 
-        loadTweetsView(stockFinalData);
+        loadTweetsView();
     });
 }
 
@@ -35,23 +35,23 @@ function initializeTweetView(companyName, index)
 
 // Parses csv to get tweet data
 function loadTweetData(companyName, index, tweetsData) {
-    var tweetDataByCompany = new Object();
-    tweetDataByCompany.key = companyName;
 
+	//Get the values for tweetDataByCompany
     var keywordData = tweetsData.map(function(d) {
-        var keywordDate = +d.date;
+        var keywordDate = d.date;
         var keywordDatum = d.keyword;
-        // var keywordType = d.type;
-        // var keywordSent = d.sentiment;
-        // var keywordID = d.id;
-        // var keywordTweet = d.tweet;
-        // var keywordRT = d.retweets;
-        // var keywordFav = d.favorites;
+        var keywordType = d.type;
+        var keywordSent = d.sentiment;
+        var keywordID = d.id;
+        var keywordTweet = d.tweet;
+        var keywordRT = d.retweets;
+        var keywordFav = d.favorites;
         
-        //return [keywordDate, keywordDatum, keywordType, keywordSent, keywordID, keywordTweet, keywordRT, keywordFav];
-        return [keywordDate, keywordDatum];
+        return [keywordDate, keywordDatum, keywordType, keywordSent, keywordID, keywordTweet, keywordRT, keywordFav];
     });
 
+    var tweetDataByCompany = new Object();
+    tweetDataByCompany.key = companyName;
     tweetDataByCompany.values = keywordData;
     tweetFinalData[index] = tweetDataByCompany;
     console.log( tweetDataByCompany);
