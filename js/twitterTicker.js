@@ -30,7 +30,7 @@ $(document).ready(function () {
     companies = ["Amazon", "Apple", "Facebook", "Intel", "IBM", "Microsoft", "Google"];
 
     loadCompanies(companies);
-    $.getScript("js/tweetsView.js", loadTweetsView);
+    $.getScript("js/tweetsView.js", initializeTweetView);
 
     $("#company-selector").on("click", "g input", handleCompanySelection);
     $("#view-mode-selector").on("click", "g input", handleViewModeSelection);

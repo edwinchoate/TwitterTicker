@@ -1,3 +1,63 @@
+
+
+// Loads tweet data and displays it for the first time
+function initializeTweetView(companyName, index)
+{
+	index = 0;
+	companyName = "Amazon";
+    d3.csv("data/" +companyName+".csv", function(tweetsData)
+    {
+        loadTweetData(companyName, index, tweetsData);
+
+        loadTweetsView(stockFinalData);
+    });
+}
+
+
+// // Loads tweet data and displays it for subsiquent times
+// function updateStockTimeline(companyName, index)
+// {
+//     d3.csv("data/" +companyName+".csv", function(tweetsData)
+//     {
+//         loadTweetData(companyName, index, tweetsData);
+        
+//         var companyMinDate = stockFinalData[index].values[0][0];
+//         var companyMaxDate = stockFinalData[0].values[stockFinalData[0].values.length - 1][0];
+//         if(minDate > companyMinDate) { minDate = companyMinDate; }
+//         if(maxDate < companyMaxDate) { maxDate = companyMaxDate; }
+        
+//         chartData.datum(stockFinalData).call(chart);
+//         nv.utils.windowResize(chart.update);
+//         currentNumberOfCompanies = stockFinalData.length;
+//     });
+// }
+
+
+// Parses csv to get tweet data
+function loadTweetData(companyName, index, tweetsData) {
+    var tweetDataByCompany = new Object();
+    tweetDataByCompany.key = companyName;
+
+    var keywordData = tweetsData.map(function(d) {
+        var keywordDate = +d.date;
+        var keywordDatum = d.keyword;
+        // var keywordType = d.type;
+        // var keywordSent = d.sentiment;
+        // var keywordID = d.id;
+        // var keywordTweet = d.tweet;
+        // var keywordRT = d.retweets;
+        // var keywordFav = d.favorites;
+        
+        //return [keywordDate, keywordDatum, keywordType, keywordSent, keywordID, keywordTweet, keywordRT, keywordFav];
+        return [keywordDate, keywordDatum];
+    });
+
+    tweetDataByCompany.values = keywordData;
+    tweetFinalData[index] = tweetDataByCompany;
+    console.log( tweetDataByCompany);
+}
+
+
 // Creates the Twitter Cluster View. Code from http://bl.ocks.org/mbostock/7882658
 function loadTweetsView () {
 
