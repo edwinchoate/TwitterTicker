@@ -7,7 +7,7 @@ import java.util.*;
 
 ControlP5 cp5;
 color background_color = color(86, 106, 117);
-String filename = "Amazon";
+String filename = "Apple";
 
 Table dates_table;
 Table analysis_table;
@@ -102,7 +102,7 @@ void scrape(){
   int new_table_index = 1;
   int dates_index = 1;
   String previous_ID = analysis_table.getString(1, 0);
-  
+
   for(int i = 1; i < analysis_table.getRowCount (); i++){
     
     //check the ID. if different from prev, new date, increase dates index
