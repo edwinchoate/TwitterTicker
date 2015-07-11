@@ -48,14 +48,14 @@ void draw(){
 void setup_new_table(){
   new_table = new Table();
   
-  new_table.setString(0, 0, "Date");
-  new_table.setString(0, 1, "Keyword");
-  new_table.setString(0, 2, "Keyword Type");
-  new_table.setString(0, 3, "Sentiment");
-  new_table.setString(0, 4, "ID");
-  new_table.setString(0, 5, "Tweet");
-  new_table.setString(0, 6, "Retweets");
-  new_table.setString(0, 7, "Favorites"); 
+  new_table.setString(0, 0, "date");
+  new_table.setString(0, 1, "keyword");
+  new_table.setString(0, 2, "type");
+  new_table.setString(0, 3, "sentiment");
+  new_table.setString(0, 4, "id");
+  new_table.setString(0, 5, "tweet");
+  new_table.setString(0, 6, "retweets");
+  new_table.setString(0, 7, "favorites"); 
 }
 
 /**********************************************************
