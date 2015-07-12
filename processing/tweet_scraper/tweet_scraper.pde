@@ -7,7 +7,7 @@ import java.util.*;
 
 ControlP5 cp5;
 color background_color = color(86, 106, 117);
-String filename = "Google";
+String filename = "";
 
 Table dates_table;
 Table analysis_table;
@@ -41,21 +41,17 @@ void setup(){
   setup_new_table();
 }
 
-void draw(){
-  
-}
-
 void setup_new_table(){
   new_table = new Table();
   
-  new_table.setString(0, 0, "date");
-  new_table.setString(0, 1, "keyword");
-  new_table.setString(0, 2, "type");
-  new_table.setString(0, 3, "sentiment");
-  new_table.setString(0, 4, "id");
-  new_table.setString(0, 5, "tweet");
-  new_table.setString(0, 6, "retweets");
-  new_table.setString(0, 7, "favorites"); 
+  new_table.addColumn("date");
+  new_table.addColumn("keyword");
+  new_table.addColumn("type");
+  new_table.addColumn("sentiment");
+  new_table.addColumn("id");
+  new_table.addColumn("tweet");
+  new_table.addColumn("retweets");
+  new_table.addColumn("favorites");
 }
 
 /**********************************************************
@@ -83,6 +79,8 @@ void process_analysis_file(File selection){
   //give the file to the data-object, get back the path from it.
   if(selection != null){
     analysis_table = loadTable(selection.getAbsolutePath(), "header");
+    String[] example = splitTokens(selection.getName(), "_");
+    filename = example[0]+"_twitter";
   }
 }
 
@@ -99,14 +97,13 @@ void scrape(){
    return;
  }
  
-  int new_table_index = 1;
-  int dates_index = 1;
-  String previous_ID = analysis_table.getString(1, "ID");
-  println("50% weed");
+  int new_table_index = 0;
+  int dates_index = 0;
+  String previous_ID = analysis_table.getString(0, "ID");
+
   for(int i = 1; i < analysis_table.getRowCount (); i++){
-     println("OH MY GORD" + i);
     //check the ID. if different from prev, new date, increase dates index
-    String current_ID = analysis_table.getString(i, 0);
+    String current_ID = analysis_table.getString(i, "ID");
     if(!current_ID.equals(previous_ID)){
       previous_ID = current_ID;
       dates_index++; //move forward one date, as the tweet ID has changed
@@ -114,7 +111,7 @@ void scrape(){
     
     //check the phrase. if present, record phrase in new table
     String current_phrase = analysis_table.getString(i, "Phrase");
-    if(!current_phrase.equals("")){
+    if(current_phrase != null && !current_phrase.equals("")){
       String phrase_sentiment =  analysis_table.getString(i, "Phrase Sentiment"); 
       record_keyword(new_table_index, dates_index, i, current_phrase, "phrase", phrase_sentiment );
       new_table_index++;
@@ -122,7 +119,7 @@ void scrape(){
     
     //check the entity. if present, record this too
     String current_entity = analysis_table.getString(i, "Entity");
-    if(!current_entity.equals("")){
+    if(current_entity != null && !current_entity.equals("")) {
       String entity_sentiment =  analysis_table.getString(i, "Entity Sentiment"); 
       record_keyword(new_table_index, dates_index, i, current_entity, "entity", entity_sentiment);
       new_table_index++;
@@ -130,7 +127,7 @@ void scrape(){
     
     //check the theme. if present, record this too
     String current_theme = analysis_table.getString(i, "Theme");
-    if(!current_theme.equals("")){
+    if(current_theme != null && !current_theme.equals("")){
       String theme_sentiment =  analysis_table.getString(i, "Theme Sentiment"); 
       record_keyword(new_table_index, dates_index, i, current_theme, "theme", theme_sentiment);
       new_table_index++;
@@ -139,7 +136,6 @@ void scrape(){
   
   println("Done!");
   saveTable(new_table, filename + ".csv");
-  
 }
 
 
@@ -161,17 +157,14 @@ void record_keyword(int new_table_index, int dates_index, int analysis_index, St
 
 
   // Write everything to the csv
-  new_table.setString(new_table_index, 0, date);   
-
-  new_table.setString(new_table_index, 1, keyword);
-  new_table.setString(new_table_index, 2, type);  
-  new_table.setString(new_table_index, 3, sentiment); 
+  new_table.setString(new_table_index, "date", date);   
+  new_table.setString(new_table_index, "keyword",  keyword);
+  new_table.setString(new_table_index, "type", type);  
+  new_table.setString(new_table_index, "sentiment",  sentiment); 
   
-  new_table.setString(new_table_index, 4, id); 
-  new_table.setString(new_table_index, 5, text); 
-  new_table.setString(new_table_index, 6, rts); 
-  new_table.setString(new_table_index, 7, favs); 
+  new_table.setString(new_table_index, "id", id); 
+  new_table.setString(new_table_index, "tweet", text); 
+  new_table.setString(new_table_index, "retweets", rts); 
+  new_table.setString(new_table_index, "favorites", favs); 
   
 }
-
-
