@@ -8,53 +8,33 @@ function initializeTweetView(companyName, index)
     d3.csv("data/twitter/" +companyName+"_twitter.csv", function(tweetsData)
     {
         loadTweetData(companyName, index, tweetsData);
-
         loadTweetsView();
     });
 }
-
-
-// // Loads tweet data and displays it for subsiquent times
-// function updateStockTimeline(companyName, index)
-// {
-//     d3.csv("data/" +companyName+".csv", function(tweetsData)
-//     {
-//         loadTweetData(companyName, index, tweetsData);
-        
-//         var companyMinDate = stockFinalData[index].values[0][0];
-//         var companyMaxDate = stockFinalData[0].values[stockFinalData[0].values.length - 1][0];
-//         if(minDate > companyMinDate) { minDate = companyMinDate; }
-//         if(maxDate < companyMaxDate) { maxDate = companyMaxDate; }
-        
-//         chartData.datum(stockFinalData).call(chart);
-//         nv.utils.windowResize(chart.update);
-//         currentNumberOfCompanies = stockFinalData.length;
-//     });
-// }
-
 
 // Parses csv to get tweet data
 function loadTweetData(companyName, index, tweetsData) {
 
 	//Get the values for tweetDataByCompany
     var keywordData = tweetsData.map(function(d) {
-        var keywordDate = d.date;
-        var keywordDatum = d.keyword;
-        var keywordType = d.type;
-        var keywordSent = d.sentiment;
-        var keywordID = d.id;
-        var keywordTweet = d.tweet;
-        var keywordRT = d.retweets;
-        var keywordFav = d.favorites;
+        var date = +d.date;
+        var keyword = d.keyword;
+        var type = d.type;
+        var sentiment = d.sentiment;
+        var id = d.id;
+        var tweet = d.tweet;
+        var retweets = d.retweets;
+        var favorites = d.favorites;
         
-        return [keywordDate, keywordDatum, keywordType, keywordSent, keywordID, keywordTweet, keywordRT, keywordFav];
+        return [date, keyword, type, sentiment, id, tweet, retweets, favorites];
     });
 
     var tweetDataByCompany = new Object();
     tweetDataByCompany.key = companyName;
     tweetDataByCompany.values = keywordData;
     tweetFinalData[index] = tweetDataByCompany;
-    console.log( tweetDataByCompany);
+    console.log("TWEETS DATA BY COMPANY", tweetDataByCompany);
+    console.log("TWEETS FINAL DATA", tweetFinalData);
 }
 
 

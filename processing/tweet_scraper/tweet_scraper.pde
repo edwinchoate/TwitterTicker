@@ -46,8 +46,9 @@ void setup_new_table(){
   
   new_table.addColumn("date");
   new_table.addColumn("keyword");
-  new_table.addColumn("type");
+  new_table.addColumn("keywordType");
   new_table.addColumn("sentiment");
+  new_table.addColumn("sentimentType");
   new_table.addColumn("id");
   new_table.addColumn("tweet");
   new_table.addColumn("retweets");
@@ -139,10 +140,12 @@ void scrape(){
 }
 
 
-void record_keyword(int new_table_index, int dates_index, int analysis_index, String keyword, String type, String sentiment){
+void record_keyword(int new_table_index, int dates_index, int analysis_index, String keyword, String sentimentType, String sentiment){
   // Get Date
   String date = dates_table.getString(dates_index, "Date (GMT)");
-     
+  String[] tokens = splitTokens(date);
+  date = tokens[0];
+
   // Get ID
   String id = analysis_table.getString(analysis_index, "ID");
   
@@ -155,13 +158,28 @@ void record_keyword(int new_table_index, int dates_index, int analysis_index, St
   // Get Favs
   String favs = dates_table.getString(dates_index, "Favorite count");
 
+  String keywordType = "";
+  keyword = keyword.trim();
 
+  if(keyword.substring(0,1).equalsIgnoreCase("@")) {
+      keywordType = "USERNAME";
+  }
+  else if(keyword.substring(0,1).equalsIgnoreCase("#")) {
+      keywordType = "HASHTAG";
+  }
+  else if(keyword.length() >= 4 && keyword.substring(0,4).equalsIgnoreCase("http")) {
+      keywordType = "LINK";
+  }
+  else {
+      keywordType = "OTHER";   
+  }
+    
   // Write everything to the csv
   new_table.setString(new_table_index, "date", date);   
   new_table.setString(new_table_index, "keyword",  keyword);
-  new_table.setString(new_table_index, "type", type);  
+  new_table.setString(new_table_index, "keywordType", keywordType);
   new_table.setString(new_table_index, "sentiment",  sentiment); 
-  
+  new_table.setString(new_table_index, "sentimentType",  sentimentType); 
   new_table.setString(new_table_index, "id", id); 
   new_table.setString(new_table_index, "tweet", text); 
   new_table.setString(new_table_index, "retweets", rts); 
