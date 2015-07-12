@@ -11,7 +11,7 @@ var selectedModeName;
     1 - SentiMagnets View
     2 - Cluster View 
 */
-var viewMode = 0; 
+var viewMode = 0;
 var companies = [];
 
 var chart;
