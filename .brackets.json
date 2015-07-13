@@ -12,6 +12,7 @@
         "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/sparklinePlus.js",
         "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/sparkline.js",
         "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/scatterChart.js",
-        "/Users/edwinchoate/git/TwitterTicker/assets/data.js"
+        "/Users/edwinchoate/git/TwitterTicker/assets/data.js",
+        "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/parallelCoordinates.js"
     ]
 }

@@ -21,10 +21,10 @@ var stuff = [{"name":"Honda Insight 2dr (gas/electric)","Small/Sporty/ Compact/L
 var chart;
 var chartData;
 
-var minDate = 0;
-var maxDate = 0; 
-var selectedMinDate = 0;
-var selectedMaxDate = 0;
+var minDate,
+    maxDate = 0;
+var startDate,
+    endData = new Date();
 var currentNumberOfCompanies = 0;
 
 var SHOW_LEGEND = true;
@@ -42,6 +42,15 @@ $(document).ready(function () {
     $("#filter-mode-selector").on("click", "g input", handleFilterModeSelection);
     
     initializeTweetsView();
+    
+    $(window).on('click', updateSelectionDates);
+    
+    function updateSelectionDates () {
+        startDate = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMin-x").text();
+        endDate = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMax-x").text();
+
+        console.log("Selected Start Date:", startDate + "\nSelected End Date:", endDate);
+    }
 
     // horizontal line seperating selected/not-selected companies
     
