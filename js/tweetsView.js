@@ -1,19 +1,10 @@
-// Loads tweet data and displays it for the first time
-function initializeTweetView(companyName, index)
-{
-	index = 0;
-	companyName = "Amazon";
-    d3.csv("data/twitter/" +companyName+"_twitter.csv", function(tweetsData)
-    {
-        loadTweetData(companyName, index, tweetsData);
-        //loadTweetsView();
-    });
-}
+
+var companyToFinalDataMap = new Map();
 
 // Parses csv to get tweet data
 function loadTweetData(companyName, index, tweetsData) {
 	
-
+	var dateToDataMap = new Map();
 	//Get the values for tweetDataByCompany
     var keywordData = tweetsData.map(function(d) {
         var date = d.date;
@@ -28,19 +19,36 @@ function loadTweetData(companyName, index, tweetsData) {
         var retweets = d.retweets;
         var favorites = d.favorites;
 
-        return [unixTime, keyword, type, sentiment, id, tweet, retweets, favorites];
+        var dataArray = [keyword, type, sentiment, id, tweet, retweets, favorites];
+
+        if(dateToDataMap.has(unixTime)) {
+        	currentData = dateToDataMap.get(unixTime);
+        	currentData.push(dataArray);
+        }
+        else {
+        	currentData = dataArray;
+        }
+
+    	dateToDataMap.put(unixTime, currentData);
     });
-    
-    var tweetDataByCompany = new Object();
-    tweetDataByCompany.key = companyName;
-    tweetDataByCompany.values = keywordData;
-    tweetFinalData[index] = tweetDataByCompany;
-    console.log("TWEETS DATA BY COMPANY", tweetDataByCompany);
-    console.log("TWEETS FINAL DATA", tweetFinalData);
 }
 
-function updateTweetsView(currentCompaniesList, oldTimeRange, currentTimeRange) {
-	
+function updateTweetsView(oldTimeRange, currentTimeRange) {
+	for(company in selectedCompanies) {
+		d3.csv("data/twitter/" +companyName+"_twitter.csv", function(tweetsData)
+	    {
+	        loadTweetData(companyName, index, tweetsData);
+	    });		
+	   
+	    //get the closest time range to oldTimeRange min and date
+	    //get the closest time range to c
+
+
+
+
+
+	}
+
 }
 
 
