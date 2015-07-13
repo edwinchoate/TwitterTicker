@@ -29,32 +29,34 @@ function loadTweetData(companyName, tweetsData) {
     	dateToDataMap.put(unixTime, currentData);
     });
 	companyToFinalDataMap.put(companyName, dateToDataMap);
-	initializeTweetsView();
+	initializeTweetsViewWithData();
 }
 
 //Changes the tweet view when a company is added or removed.
-function updateTweetsView() {
-	if(selectedCompanies.length == 0){
-		return;
-	}
+function loadTweetsView() {
 	var myLength = selectedCompanies.length;
 	for(var i = 0; i < myLength; i++) {
 		companyName = selectedCompanies[i];
 		d3.csv("data/twitter/" +companyName+"_twitter.csv", function(tweetsData)
 	    {
 	        loadTweetData(companyName, tweetsData);
-	    });	
-    }	
+	    });
+	}	
 }
 
 
 
 // Changes the tweets view when the viewfinder is moved.
 function scrollTweetsView(){
-	myStartDate = Date.parse(startDate);
-	myEndDate = Date.parse(endDate);
-	myOldStartDate = Date.parse(oldStartDate);
-	myOldEndDate = Date.parse(oldEndDate);
+	myStartDate = startDate;
+	myEndDate = endDate;
+	myOldStartDate = oldStartDate;
+	myOldEndDate = oldEndDate;
+
+	console.log("SCROLL:  START DATE CHANGED: ", myStartDate);
+	console.log("SCROLL: END DATE CHANGED: ", myEndDate);
+	console.log("SCROLL: OLD START DATE CHANGED: ", myOldStartDate);
+	console.log("SCROLL: OLD END DATE CHANGED: ", myOldEndDate);
 
 	if(myStartDate < myOldStartDate && myOldEndDate === myOldEndDate) {
 			//add on extra 
@@ -95,22 +97,27 @@ function scrollTweetsView(){
 		}
 }
 
+
 function parseDateAsInt(date){
-	if(typeof date === 'undefined' || date === null){
-		return;
-	}
-    var parts = date.split('/');
-	var myDate = new Date(parts[2],parts[0]-1,parts[1]); 
-	return Date.parse(myDate);
+    var toReturn = new Date(null);
+    if(typeof date === 'string' || date !== null){
+        var parts = date.split('/');
+        var myDate = new Date(parts[2],parts[0]-1,parts[1]); 
+        toReturn = Date.parse(myDate);
+    }
+    return toReturn;
 }
+
+
 
 // Scans through the data, makes 'buckets' for each bubble (keyword),
 // and aggregates the data for each bubble (keyword).
-function initializeTweetsView (){
+function initializeTweetsViewWithData(){
 
 	var myLength = selectedCompanies.length;
-	myStartDate = Date.parse(startDate);
-	myEndDate = Date.parse(endDate);
+
+	console.log("MY START DATE", myStartDate);
+	console.log("MY END DATE ", myEndDate);
 
 	for(var i = 0; i < myLength; i++) {
 		company = selectedCompanies[i];
@@ -122,17 +129,17 @@ function initializeTweetsView (){
 		for(var i = 0; i < keysetLength; i++){
 			
 			var date = keyset[i];
-			console.log("SKIP DATE", myStartDate, myEndDate, date);
+			//console.log("SKIP DATE", myStartDate, myEndDate, date);
 			if(date > myStartDate && date < myEndDate){
 				//doodle through until you get to the end date
-				console.log("DO THE DO");
+				//console.log("DO THE DO");
 				var data = dateToDataMap.get(date);
 				var currentKeyword = data[0];
 
 				if(keywordToDataMap.hasValue(currentKeyword)){
 					// add new entry
 					keywordToDataMap.put(currentKeyword, [data[1],data[2],data[6],data[7],data[8], 1.0]);
-					console.log("New Jack", keywordToDataMap);
+					//console.log("New Jack", keywordToDataMap);
 				}
 				else{
 					aggregatedData = keywordToDataMap.get(currentKeyword);
@@ -146,7 +153,7 @@ function initializeTweetsView (){
 					newPop = data[8] + aggregatedData[4];
 
 					keywordToDataMap.put(currentKeyword, [data[1], newSentiment, newRT, newFav, newPop, newCount]);
-					console.log("Alligatorate Jack", keywordToDataMap);
+					//console.log("Alligatorate Jack", keywordToDataMap);
 				}
 			}
 			else if(date > endDate){
@@ -439,7 +446,7 @@ function loadWordCloudView() {
 
 
 // Creates the Twitter Cluster View. Code from http://bl.ocks.org/mbostock/7882658
-function loadTweetsView () {
+function loadClusterView() {
 
 	var width = 500,
     height = 500,

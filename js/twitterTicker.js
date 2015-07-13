@@ -26,9 +26,14 @@ var chartData;
 
 var minDate,
     maxDate = 0;
-var startDate,
-    endDate = new Date();
 
+var myStartDate, 
+    myEndDate, 
+    myOldStartDate,
+    myOldEndDate;
+
+var startDate, endDate;
+var firstTimeLoad = true;
 
 var oldStartDate, 
     oldEndDate = new Date();
@@ -43,14 +48,17 @@ $(document).ready(function () {
     companies = ["Amazon", "Apple", "Facebook", "Intel", "IBM", "Microsoft", "Google"];
 
     loadCompanies(companies);
+    initializeTweetsView();
 
     $("#company-selector").on("click", "g input", handleCompanySelection);
     $("#view-mode-selector").on("click", "g input", handleViewModeSelection);
     $("#filter-mode-selector").on("click", "g input", handleFilterModeSelection);
-    
-    initializeTweetsView();
-    
+    //ON CLICK FOR THE NAV BAR   
     $(window).on('click', updateSelectionDates);
+    //$('.g.nv-x.nv.brush').on('click', updateSelectionDates);
+
+       // var unparsedEndDate   = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMax-x").text();
+
    
     // horizontal line seperating selected/not-selected companies
     
@@ -82,8 +90,7 @@ $(document).ready(function () {
             selectedCompanies.push(currentCompany.attr("for").toString());
             var index = selectedCompanies.indexOf(currentCompanyName);
             addCompany(currentCompanyName, index);
-            
-
+        
             currentCompany.addClass("selected");
             $(this).closest("g").prependTo("#selected-container");
         }
@@ -119,15 +126,35 @@ $(document).ready(function () {
     }
  });
  
+
 function updateSelectionDates () {
-    oldStartDate = startDate;
-    oldEndDate   = endDate;
+    
 
-    startDate = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMin-x").text();
-    endDate = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMax-x").text();
 
-    console.log("Selected Start Date:", startDate + "\nSelected End Date:", endDate);
-    $.getScript("js/tweetsView.js", updateTweetsView());
+    
+    if(!firstTimeLoad) {
+        console.log("THE SCROLL BAR HAS MOVED REGARDLESS OF NUMBER OF COMPANIES");
+        oldStartDate = startDate;
+        oldEndDate   = endDate;
+
+        var unparsedStartDate = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMin-x").text();
+        var unparsedEndDate   = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMax-x").text();
+
+        startDate = Date.parse(unparsedStartDate);
+        endDate   = Date.parse(unparsedEndDate);
+
+        console.log("Selected Start Date:", startDate + "\nSelected End Date:", endDate);
+        $.getScript("js/tweetsView.js", scrollTweetsView);
+    }
+    else {
+        console.log("LOAD TWEETS VIEW INITIALLY");
+        myStartDate = startDate;
+        myEndDate   = endDate; 
+        oldStartDate = myStartDate;
+        oldEndDate = myEndDate;
+        //need to update this so that we can get
+        $.getScript("js/tweetsView.js", loadTweetsView());
+    }
 }
 
 function addCompany(companyName, index) {
@@ -170,11 +197,13 @@ function initializeStockTimeline(companyName, index)
         minDate = stockFinalData[0].values[0][0];
         maxDate = stockFinalData[0].values[stockFinalData[0].values.length - 1][0];
 
-        loadStockTimeline(stockFinalData);
+        startDate = (maxDate-minDate)/4 + minDate;
+        endDate   = 3*(maxDate-minDate)/4 + minDate;
+
+        console.log("START DATE: ",startDate, "END DATE", endDate);
+        loadStockTimeline(stockFinalData, startDate, endDate);
         currentNumberOfCompanies = stockFinalData.length;
-
-        updateSelectionDates();
-
+        //updateSelectionDates();
     });
 }
 
@@ -182,20 +211,27 @@ function updateStockTimeline(companyName, index)
 {
     d3.csv("data/stock/" +companyName+"_stock.csv", function(pricesData)
     {
+        firstTimeLoad = false;
         loadStockData(companyName, index, pricesData);
         
         var companyMinDate = stockFinalData[index].values[0][0];
         var companyMaxDate = stockFinalData[0].values[stockFinalData[0].values.length - 1][0];
         if(minDate > companyMinDate) { minDate = companyMinDate; }
         if(maxDate < companyMaxDate) { maxDate = companyMaxDate; }
-        
+
+        startDate = (maxDate-minDate)/4 + minDate;
+        endDate   = 3*(maxDate-minDate)/4 + minDate;
+
+        chart.brushExtent([startDate, endDate]);
         chartData.datum(stockFinalData).call(chart);
         nv.utils.windowResize(chart.update);
         currentNumberOfCompanies = stockFinalData.length;
+
+        //updateSelectionDates();
     });
 }
 
-function loadStockTimeline (data) {
+function loadStockTimeline (data, start, end) {
     nv.addGraph(function() {
 
         chart = nv.models.lineWithFocusChart()
@@ -206,9 +242,8 @@ function loadStockTimeline (data) {
                     .color(d3.scale.category10().range())
                     .clipVoronoi(false)
                     .showLegend(SHOW_LEGEND);
-        console.log("CHART X: ", chart.x());
-        console.log("CHART Y: ", chart.y());
-        chart.brushExtent([(maxDate-minDate)/4 + minDate,3*(maxDate-minDate)/4 + minDate]);
+
+        chart.brushExtent([start, end]);
         chart.margin({left: 75, bottom: 50});
         chart.focusMargin({ "bottom": 40 });
         chart.focusHeight(70);
