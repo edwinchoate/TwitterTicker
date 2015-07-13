@@ -1,17 +1,12 @@
-var oldTimeRange = [];
-var newTimeRange = [];
+
 // Parses csv to get tweet data
 function loadTweetData(companyName, tweetsData) {
 	
 	var dateToDataMap = new LinkedHashMap();
 	//Get the values for tweetDataByCompany
     var keywordData = tweetsData.map(function(d) {
-        
-        var date = d.date;
-        var parts = date.split('/');
-		var myDate = new Date(parts[2],parts[0]-1,parts[1]); 
-		var unixTime = Date.parse(myDate);
 
+        var unixTime = parseDateAsInt(d.date);
         var keyword = d.keyword;
         var keywordType = d.keywordType;
         var sentiment = d.sentiment;
@@ -34,59 +29,132 @@ function loadTweetData(companyName, tweetsData) {
     	dateToDataMap.put(unixTime, currentData);
     });
 	companyToFinalDataMap.put(companyName, dateToDataMap);
+	initializeTweetsView();
 }
 
+//Changes the tweet view when a company is added or removed.
 function updateTweetsView() {
-	//for(company in selectedCompanies) {
-
-		companyName = "Apple";
+	if(selectedCompanies.length == 0){
+		return;
+	}
+	var myLength = selectedCompanies.length;
+	for(var i = 0; i < myLength; i++) {
+		companyName = selectedCompanies[i];
 		d3.csv("data/twitter/" +companyName+"_twitter.csv", function(tweetsData)
 	    {
 	        loadTweetData(companyName, tweetsData);
-	    });		
-		if(startDate < oldStartDate && oldEndDate === oldEndDate) {
-			//add on extra 
-
-		}
-		else if(startDate === oldStartDate && endDate === oldEndDate) {
-
-		}
-		else if(startDate > oldStartDate && oldEndDate === oldEndDate) {
-			//add on extra 
-			
-		}
-		else if(startDate < oldStartDate && endDate < oldEndDate) {
-
-		}
-		else if(startDate === oldStartDate && oldEndDate < oldEndDate) {
-			//add on extra 
-			
-		}
-		else if(startDate > oldStartDate && endDate < oldEndDate) {
-
-		}
-		else if(startDate < oldStartDate && oldEndDate > oldEndDate) {
-			//add on extra 
-			
-		}
-		else if(startDate === oldStartDate && endDate > oldEndDate) {
-
-		}
-		else if(startDate > oldStartDate && endDate > oldEndDate) {
-
-		}
-		else if(endDate < oldStartDate) {
-
-		}
-		else if(startDate > oldEndDate) {
-
-		}
-
-	    //get the closest time range to oldTimeRange min and date
-	    //get the closest time range to c
-
+	    });	
+    }	
 }
 
+
+
+// Changes the tweets view when the viewfinder is moved.
+function scrollTweetsView(){
+	myStartDate = Date.parse(startDate);
+	myEndDate = Date.parse(endDate);
+	myOldStartDate = Date.parse(oldStartDate);
+	myOldEndDate = Date.parse(oldEndDate);
+
+	if(myStartDate < myOldStartDate && myOldEndDate === myOldEndDate) {
+			//add on extra 
+
+		}
+		else if(myStartDate === myOldStartDate && myEndDate === myOldEndDate) {
+
+		}
+		else if(myStartDate > myOldStartDate && myOldEndDate === myOldEndDate) {
+			//add on extra 
+			
+		}
+		else if(myStartDate < myOldStartDate && myEndDate < myOldEndDate) {
+
+		}
+		else if(myStartDate === myOldStartDate && myOldEndDate < myOldEndDate) {
+			//add on extra 
+			
+		}
+		else if(myStartDate > myOldStartDate && myEndDate < myOldEndDate) {
+
+		}
+		else if(myStartDate < myOldStartDate && myOldEndDate > myOldEndDate) {
+			//add on extra 
+			
+		}
+		else if(myStartDate === myOldStartDate && myEndDate > myOldEndDate) {
+
+		}
+		else if(myStartDate > myOldStartDate && myEndDate > myOldEndDate) {
+
+		}
+		else if(myEndDate < myOldStartDate) {
+
+		}
+		else if(myStartDate > myOldEndDate) {
+
+		}
+}
+
+function parseDateAsInt(date){
+	if(typeof date === 'undefined' || date === null){
+		return;
+	}
+    var parts = date.split('/');
+	var myDate = new Date(parts[2],parts[0]-1,parts[1]); 
+	return Date.parse(myDate);
+}
+
+// Scans through the data, makes 'buckets' for each bubble (keyword),
+// and aggregates the data for each bubble (keyword).
+function initializeTweetsView (){
+
+	var myLength = selectedCompanies.length;
+	myStartDate = Date.parse(startDate);
+	myEndDate = Date.parse(endDate);
+
+	for(var i = 0; i < myLength; i++) {
+		company = selectedCompanies[i];
+		var dateToDataMap = companyToFinalDataMap.get(company);
+		var keyset = dateToDataMap.getAllKeys();
+
+		// for every date between these two
+		var keysetLength = keyset.length;
+		for(var i = 0; i < keysetLength; i++){
+			
+			var date = keyset[i];
+			console.log("SKIP DATE", myStartDate, myEndDate, date);
+			if(date > myStartDate && date < myEndDate){
+				//doodle through until you get to the end date
+				console.log("DO THE DO");
+				var data = dateToDataMap.get(date);
+				var currentKeyword = data[0];
+
+				if(keywordToDataMap.hasValue(currentKeyword)){
+					// add new entry
+					keywordToDataMap.put(currentKeyword, [data[1],data[2],data[6],data[7],data[8], 1.0]);
+					console.log("New Jack", keywordToDataMap);
+				}
+				else{
+					aggregatedData = keywordToDataMap.get(currentKeyword);
+
+					//modify the current entry
+					
+					newCount = aggregatedData[5] + 1.0;
+					newSentiment = (data[2] + aggregatedData[1]) / newCount;
+					newRT = data[6] + aggregatedData[2];
+					newFav = data[7] + aggregatedData[3];
+					newPop = data[8] + aggregatedData[4];
+
+					keywordToDataMap.put(currentKeyword, [data[1], newSentiment, newRT, newFav, newPop, newCount]);
+					console.log("Alligatorate Jack", keywordToDataMap);
+				}
+			}
+			else if(date > endDate){
+				break;
+			}
+		}	
+	}
+}
 
 function loadWordCloudView() {
 		// Generated by CoffeeScript 1.9.3

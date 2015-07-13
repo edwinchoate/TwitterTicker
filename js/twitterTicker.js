@@ -28,6 +28,8 @@ var minDate,
     maxDate = 0;
 var startDate,
     endDate = new Date();
+
+
 var oldStartDate, 
     oldEndDate = new Date();
 var currentNumberOfCompanies = 0;
@@ -80,7 +82,7 @@ $(document).ready(function () {
             selectedCompanies.push(currentCompany.attr("for").toString());
             var index = selectedCompanies.indexOf(currentCompanyName);
             addCompany(currentCompanyName, index);
-                $.getScript("js/tweetsView.js", updateTweetsView);
+            
 
             currentCompany.addClass("selected");
             $(this).closest("g").prependTo("#selected-container");
@@ -125,6 +127,7 @@ function updateSelectionDates () {
     endDate = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMax-x").text();
 
     console.log("Selected Start Date:", startDate + "\nSelected End Date:", endDate);
+    $.getScript("js/tweetsView.js", updateTweetsView());
 }
 
 function addCompany(companyName, index) {
