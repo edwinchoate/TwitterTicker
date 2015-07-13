@@ -23,9 +23,15 @@
         <script src="nvd3/build/nv.d3.min.js"></script>
         <link href="nvd3/build/nv.d3.css" rel="stylesheet" type="text/css">
         <script src="nvd3/examples/lib/stream_layers.js"></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+        
+        <!-- Dust and Magnets Vis https://github.com/koek67/d3-dust-and-magnet -->
+        <script src="assets/data.js"></script>
+        <script type="text/javascript" src="js/viz.js"></script>
         
         <!-- Custom CSS -->
-        <link href="css/main.css" rel="stylesheet">        
+        <link href="css/main.css" rel="stylesheet"> 
+        <link href="css/style.css" rel="stylesheet"> 
     </head>
     <body>
         
@@ -156,6 +162,16 @@
                             <div class="col-sm-9 col-xs-12">
                                 <div id="tweetsView">
                                     
+                                    <div id="magnet-view"></div>
+                                    
+                                    <div id="senti-view">
+                                        <h1 style="margin: 0; padding: 0;">SENTI VIEW will go here!</h1>
+                                    </div>
+                                    
+                                    <div id="cluster-view">
+                                        <h1 style="margin: 0; padding: 0;">CLUSTER VIEW will go here!</h1>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -171,7 +187,8 @@
         
         
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+        
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
         <script src="js/twitterTicker.js"></script>

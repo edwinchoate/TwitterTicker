@@ -1,6 +1,7 @@
 @twitter-blue: #55acee;
 @text-color: #ccc;
 @bg-color: #444;
+@bg-color-dark: #373737;
 @text-color-light: #ddd;
 
 html, body {
@@ -87,6 +88,14 @@ a:visited {
 .well {
     background-color: @bg-color;
     border: none;
+    
+    #chart, #tweetsView {
+        background-color: @bg-color-dark;
+    }
+    
+    #tweetsView {
+        height: 500px;   
+    }
 }
 
 img {

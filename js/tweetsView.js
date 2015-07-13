@@ -8,7 +8,7 @@ function initializeTweetView(companyName, index)
     d3.csv("data/twitter/" +companyName+"_twitter.csv", function(tweetsData)
     {
         loadTweetData(companyName, index, tweetsData);
-        loadTweetsView();
+        //loadTweetsView();
     });
 }
 
