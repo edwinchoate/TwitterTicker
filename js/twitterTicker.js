@@ -1,6 +1,7 @@
 var stockFinalData    = [];
 var tweetFinalData    = [];
 var selectedCompanies = [];
+var currentDisplayedKeywords = [];
 
 var selectedModeTag;
 var selectedModeName;
@@ -22,6 +23,8 @@ var chartData;
 
 var minDate = 0;
 var maxDate = 0; 
+var selectedMinDate = 0;
+var selectedMaxDate = 0;
 var currentNumberOfCompanies = 0;
 
 var SHOW_LEGEND = true;
@@ -180,7 +183,8 @@ function loadStockTimeline (data) {
                     .color(d3.scale.category10().range())
                     .clipVoronoi(false)
                     .showLegend(SHOW_LEGEND);
-
+        console.log("CHART X: ", chart.x());
+        console.log("CHART Y: ", chart.y());
         chart.brushExtent([(maxDate-minDate)/4 + minDate,3*(maxDate-minDate)/4 + minDate]);
         chart.margin({left: 75, bottom: 50});
         chart.focusMargin({ "bottom": 40 });
@@ -234,87 +238,3 @@ function displayTwitterVis() {
     }
 
 }
-
-
-
-/* INSPIRATION FOR THE MODE SELECTOR BELOW
-
-----USES THE MODE SELECTOR INPUT CHECKED TO DO SELECTION OF CHECKBOX. REMOVING DOESN"T UPDATE VIS
-var count = $("#mode-selector input:checked").length;
-    console.log("COUNT", count);
-    if(currentNumberOfCompanies > 0) {
-        var currentModeTag = $(this).find("label");
-        console.log("CURRENT MODE", currentModeTag);
-
-        var currentModeName = currentModeTag.context.id;
-
-        console.log("CURRENT MODE NAME", currentModeName);
-
-        if(count == 0)
-        {
-            selectedModeTag = [];
-            selectedModeName = NO_TWITTER_VIEW_SELECTED;
-            console.log("NADA");
-        }
-        else if(count == 1) {
-            var check = $(this).attr('checked');
-            console.log("JUST CLICKED A NEW ONE");
-            selectedModeTag = currentModeTag;
-            selectedModeName = currentModeName;
-        }
-        else if(count == 2) {
-            console.log("SELECTED", selectedModeTag);
-            console.log("selectedMODE NAME", selectedModeName);
-            $("#" +selectedModeName).prop('checked', false); // Unchecks it  
-            console.log("#"+selectedModeName);
-            //$(selectedModeTag).attr('checked', false);
-            console.log("JUST SWITCHED TO A NEW VIEW");
-            selectedModeTag = currentModeTag;
-            selectedModeName = currentModeName;  
-        }
-    }
-    else {
-        alert("Please choose a company to view first!");
-    }
-*/
-
-/* -----DOES IT THE WAY WE"VE GOT IT SET UP WITH THE OTHER ONE. REMOVING DOESN"T UPDATE VISs
-//handle mode selection
-    function handleModeSelection() {
-        if(currentNumberOfCompanies > 0) {
-            var currentModeTag = $(this).find("label");
-            var currentModeName = currentModeTag.attr("for").toString();
-
-            console.log("CURRNET MODE", currentModeTag);
-            console.log("CURRENT MODE NAME", currentModeName);
-
-            if((typeof selectedModeTag != 'undefined') && (currentModeTag.hasClass("selected") || selectedModeTag.hasClass("selected"))) {
-                if(selectedModeName.toUpperCase() === currentModeName.toUpperCase()) {
-                    currentModeTag.removeClass("selected"); //click the same one and I remove it
-                    selectedModeTag.removeClass("selected");
-                    selectedModeName = NO_TWITTER_VIEW_SELECTED;
-                    console.log("THE SAME ONE SHOULD BE OFF", selectedModeName);
-                }
-                else {
-                    selectedModeTag.removeClass("selected");
-                    $(selectedModeTag).removeAttr('checked');
-                    selectedModeTag = currentModeTag;
-                    console.log("OLD SELECTED", selectedModeName);
-                    selectedModeName = currentModeName;
-                    selectedModeTag.addClass("selected");
-                    console.log("THE NEW ONE SHOULD BE ON and OLD ONE SHOULD BE OFF NEW SELECTED", selectedModeName);
-                }
-            }
-            else {
-                console.log("You just added a new one");
-                currentModeTag.addClass("selected");
-                selectedModeTag = currentModeTag;
-                selectedModeName = currentModeName;
-            }
-            displayTwitterVis();
-        }
-        else {
-            alert("Please choose a company to view first!");
-        }
-    }
-*/
