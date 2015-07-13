@@ -1,53 +1,89 @@
-
-var companyToFinalDataMap = new Map();
-
+var oldTimeRange = [];
+var newTimeRange = [];
 // Parses csv to get tweet data
-function loadTweetData(companyName, index, tweetsData) {
+function loadTweetData(companyName, tweetsData) {
 	
-	var dateToDataMap = new Map();
+	var dateToDataMap = new LinkedHashMap();
 	//Get the values for tweetDataByCompany
     var keywordData = tweetsData.map(function(d) {
+        
         var date = d.date;
         var parts = date.split('/');
 		var myDate = new Date(parts[2],parts[0]-1,parts[1]); 
 		var unixTime = Date.parse(myDate);
+
         var keyword = d.keyword;
-        var type = d.type;
+        var keywordType = d.keywordType;
         var sentiment = d.sentiment;
+        var sentimentType = d.sentimentType;
         var id = d.id;
         var tweet = d.tweet;
         var retweets = d.retweets;
         var favorites = d.favorites;
+        var popularity = d.popularity;
 
-        var dataArray = [keyword, type, sentiment, id, tweet, retweets, favorites];
+        var dataArray = [keyword, keywordType, sentiment, sentimentType, id, tweet, retweets, favorites, popularity];
 
-        if(dateToDataMap.has(unixTime)) {
+        if(dateToDataMap.hasValue(unixTime)) {
         	currentData = dateToDataMap.get(unixTime);
-        	currentData.push(dataArray);
+        	currentData.concat(dataArray);
         }
         else {
         	currentData = dataArray;
         }
-
     	dateToDataMap.put(unixTime, currentData);
     });
+	companyToFinalDataMap.put(companyName, dateToDataMap);
 }
 
-function updateTweetsView(oldTimeRange, currentTimeRange) {
-	for(company in selectedCompanies) {
+function updateTweetsView() {
+	//for(company in selectedCompanies) {
+
+		companyName = "Apple";
 		d3.csv("data/twitter/" +companyName+"_twitter.csv", function(tweetsData)
 	    {
-	        loadTweetData(companyName, index, tweetsData);
+	        loadTweetData(companyName, tweetsData);
 	    });		
-	   
+		if(startDate < oldStartDate && oldEndDate === oldEndDate) {
+			//add on extra 
+
+		}
+		else if(startDate === oldStartDate && endDate === oldEndDate) {
+
+		}
+		else if(startDate > oldStartDate && oldEndDate === oldEndDate) {
+			//add on extra 
+			
+		}
+		else if(startDate < oldStartDate && endDate < oldEndDate) {
+
+		}
+		else if(startDate === oldStartDate && oldEndDate < oldEndDate) {
+			//add on extra 
+			
+		}
+		else if(startDate > oldStartDate && endDate < oldEndDate) {
+
+		}
+		else if(startDate < oldStartDate && oldEndDate > oldEndDate) {
+			//add on extra 
+			
+		}
+		else if(startDate === oldStartDate && endDate > oldEndDate) {
+
+		}
+		else if(startDate > oldStartDate && endDate > oldEndDate) {
+
+		}
+		else if(endDate < oldStartDate) {
+
+		}
+		else if(startDate > oldEndDate) {
+
+		}
+
 	    //get the closest time range to oldTimeRange min and date
 	    //get the closest time range to c
-
-
-
-
-
-	}
 
 }
 

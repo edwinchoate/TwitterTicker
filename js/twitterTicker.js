@@ -3,6 +3,9 @@ var tweetFinalData    = [];
 var selectedCompanies = [];
 var currentDisplayedKeywords = [];
 
+var companyToFinalDataMap = new LinkedHashMap();
+var keywordToDataMap      = new LinkedHashMap();
+
 var selectedModeTag;
 var selectedModeName;
 
@@ -24,7 +27,9 @@ var chartData;
 var minDate,
     maxDate = 0;
 var startDate,
-    endData = new Date();
+    endDate = new Date();
+var oldStartDate, 
+    oldEndDate = new Date();
 var currentNumberOfCompanies = 0;
 
 var SHOW_LEGEND = true;
@@ -36,7 +41,7 @@ $(document).ready(function () {
     companies = ["Amazon", "Apple", "Facebook", "Intel", "IBM", "Microsoft", "Google"];
 
     loadCompanies(companies);
-    
+
     $("#company-selector").on("click", "g input", handleCompanySelection);
     $("#view-mode-selector").on("click", "g input", handleViewModeSelection);
     $("#filter-mode-selector").on("click", "g input", handleFilterModeSelection);
@@ -44,14 +49,7 @@ $(document).ready(function () {
     initializeTweetsView();
     
     $(window).on('click', updateSelectionDates);
-    
-    function updateSelectionDates () {
-        startDate = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMin-x").text();
-        endDate = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMax-x").text();
-
-        console.log("Selected Start Date:", startDate + "\nSelected End Date:", endDate);
-    }
-
+   
     // horizontal line seperating selected/not-selected companies
     
     // load companies into selector pane
@@ -82,6 +80,8 @@ $(document).ready(function () {
             selectedCompanies.push(currentCompany.attr("for").toString());
             var index = selectedCompanies.indexOf(currentCompanyName);
             addCompany(currentCompanyName, index);
+                $.getScript("js/tweetsView.js", updateTweetsView);
+
             currentCompany.addClass("selected");
             $(this).closest("g").prependTo("#selected-container");
         }
@@ -116,6 +116,16 @@ $(document).ready(function () {
         }
     }
  });
+ 
+function updateSelectionDates () {
+    oldStartDate = startDate;
+    oldEndDate   = endDate;
+
+    startDate = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMin-x").text();
+    endDate = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMax-x").text();
+
+    console.log("Selected Start Date:", startDate + "\nSelected End Date:", endDate);
+}
 
 function addCompany(companyName, index) {
     console.log("Adding " + companyName + " to Stock Timeline...");
@@ -159,6 +169,8 @@ function initializeStockTimeline(companyName, index)
 
         loadStockTimeline(stockFinalData);
         currentNumberOfCompanies = stockFinalData.length;
+
+        updateSelectionDates();
 
     });
 }
