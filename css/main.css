@@ -68,13 +68,14 @@ a:visited {
 .well {
   background-color: #444444;
   border: none;
+  margin: 0 auto 0 auto;
 }
 .well #chart,
 .well #tweetsView {
   background-color: #373737;
 }
 .well #tweetsView {
-  height: 500px;
+  height: 550px;
 }
 img {
   width: 100%;
@@ -101,7 +102,7 @@ svg {
 #chart text,
 svg text {
   fill: #999999;
-  font-family: "Helvetica", "Arial";
+  font-family: "Source Sans Pro", "sans-serif";
   font-weight: 200;
 }
 #chart line,
@@ -130,4 +131,12 @@ svg rect.extent {
 }
 #mode-selector {
   max-height: 250px;
+}
+#twitter-stats {
+  text-align: center;
+  margin: 10px auto 10px auto;
+  padding: 0 0 0 0;
+}
+#twitter-stats p {
+  padding: 10px 0 10px 0;
 }

@@ -89,13 +89,14 @@ a:visited {
 .well {
     background-color: @bg-color;
     border: none;
+    margin: 0 auto 0 auto;
     
     #chart, #tweetsView {
         background-color: @bg-color-dark;
     }
     
     #tweetsView {
-        height: 500px;   
+        height: 550px;   
     }
 }
 
@@ -125,7 +126,7 @@ img {
     
     text {
         fill: darken(white, 40%);  
-        font-family: "Helvetica", "Arial";
+        font-family: "Source Sans Pro", "sans-serif";
         font-weight: 200;
     }
     
@@ -157,4 +158,14 @@ img {
 
 #mode-selector {
   max-height: 250px;
+}
+
+#twitter-stats {
+    text-align: center;
+    margin: 10px auto 10px auto;
+    padding: 0 0 0 0;
+    
+    p {
+        padding: 10px 0 10px 0;
+    }
 }

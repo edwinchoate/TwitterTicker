@@ -9,6 +9,8 @@ var keywordToDataMap      = new LinkedHashMap();
 var selectedModeTag;
 var selectedModeName;
 
+var isTweetSelected = false;
+
 /*
     viewMode represents one of three modes:
     0 - RelaTweeter View
@@ -45,16 +47,19 @@ var NO_TWITTER_VIEW_SELECTED = "No Twitter View Selected";
 
 $(document).ready(function () {
     
-    companies = ["Amazon", "Apple", "Facebook", "Intel", "IBM", "Microsoft", "Google"];
+    companies = ["Amazon", "Apple", "Intel", "IBM", "Microsoft", "Google"];
+    $("#filter-tweet-selector").slider();
 
     loadCompanies(companies);
     initializeTweetsView();
+    
+    loadTweetLineDisplay();
 
     $("#company-selector").on("click", "g input", handleCompanySelection);
     $("#view-mode-selector").on("click", "g input", handleViewModeSelection);
     $("#filter-mode-selector").on("click", "g input", handleFilterModeSelection);
     //ON CLICK FOR THE NAV BAR   
-    $(window).on('click', updateSelectionDates);
+    //$(window).on('click', updateSelectionDates);
     //$('.g.nv-x.nv.brush').on('click', updateSelectionDates);
 
        // var unparsedEndDate   = $(".nv-focus").find(".nv-axisMaxMin.nv-axisMaxMin-x.nv-axisMax-x").text();
@@ -249,7 +254,7 @@ function loadStockTimeline (data, start, end) {
         chart.focusHeight(70);
 
         chart.xAxis.tickFormat(function(d) {return d3.time.format('%m/%d/%y')(new Date(d))});
-        chart.x2Axis.axisLabel("Dates")
+        chart.x2Axis.axisLabel("Date")
                     .tickFormat(function(d) {return d3.time.format('%m/%d/%y')(new Date(d))});
 
         chart.yAxis.axisLabel("Stock Price ($USD)")
@@ -269,6 +274,8 @@ function initializeTweetsView () {
     
     // Init Magnet View and hide it
     initializeMagnetView();
+    initializeSentiView();
+    initializeClusterView();
 }
 
 function initializeMagnetView () {
@@ -278,9 +285,30 @@ function initializeMagnetView () {
     $("#magnet-view, #senti-view, #cluster-view").hide();
 }
 
+function initializeSentiView () {
+    $.getScript("js/tweetsView.js", loadSentiView);
+}
+
+function initializeClusterView () {
+    $.getScript("js/tweetsView.js", loadClusterView);
+}
+
+function loadTweetLineDisplay () {
+    if (!isTweetSelected) {
+        $("#tweet-display").text("No tweet is selected.");
+        $("#num-retweets-display").text("0");
+        $("#num-favorites-display").text("0");
+    } else {
+        // update displayed twitter stats based on most popular tweet attr of selected keyword
+        
+    }
+}
+
 function displayTwitterVis() {
     
     $("#magnet-view, #senti-view, #cluster-view").hide();
+    
+    loadTweetLineDisplay();
     
     // Display Tweets based on currently selected mode
     switch (viewMode) {

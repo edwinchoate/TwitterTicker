@@ -95,7 +95,7 @@
             <div class="container">
 
                 <div class="row">
-                    <!-- The grey pane that wraps the whole vis -->
+                    <!-- First half of vis -->
                     <div class="well well-lg">
                         
                         <div class="row">
@@ -117,8 +117,16 @@
                         </div>
                         
                     </div>
+                    
+                    <!-- A line that displays details for the currently selected tweet/keyword -->
+                    <div id="twitter-stats">
+                        <p><span id="tweet-display"></span>
+                        <i class="fa fa-retweet"></i> <span id="num-retweets-display"></span> 
+                        <i class="fa fa-star"></i> <span id="num-favorites-display"></span>
+                        </p>
+                    </div>
 
-                    <!-- The grey pane that wraps the whole vis -->
+                    <!-- Second half of vis -->
                     <div class="well well-lg">
                         
                         <div class="row">
@@ -158,20 +166,20 @@
                                         <label class="selected" for="keywords"><i class="fa fa-bullseye"></i> Other Keywords</label><br>
                                     </g>
                                 </form>
+                                <h3>Filter Tweets</h3>
+                                <form id="filter-tweet-selector"></form>
                             </div>
-                            <!-- Twitter Bubble part of the vis -->
+                            <!-- Twitter view part of the vis -->
                             <div class="col-sm-9 col-xs-12">
                                 <div id="tweetsView">
                                     
                                     <div id="magnet-view"></div>
                                     
                                     <div id="senti-view">
-                                        <h1 style="margin: 0; padding: 0;">SENTI VIEW will go here!</h1>
+                                        <div id="vis"></div>
                                     </div>
                                     
-                                    <div id="cluster-view">
-                                        <h1 style="margin: 0; padding: 0;">CLUSTER VIEW will go here!</h1>
-                                    </div>
+                                    <div id="cluster-view"></div>
                                     
                                 </div>
                             </div>
@@ -188,7 +196,11 @@
         
         
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        
+        <!-- jQuery UI Components -->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
