@@ -28,61 +28,19 @@ function loadTweetData(companyName, tweetsData) {
     });
     companyToFinalDataMap.put(companyName, dateToDataMap);
     initializeTweetsViewWithData();
+    console.log("DATE TO DATA MAP", dateToDataMap);
 }
 
 //Changes the tweet view when a company is added or removed.
-function loadTweetsView() {
+function loadTwitterData() {
     var myLength = selectedCompanies.length;
     for (var i = 0; i < myLength; i++) {
         companyName = selectedCompanies[i];
-        d3.csv("data/twitter/" + companyName + "_twitter.csv", function (tweetsData) {
+        d3.csv("data/twitter/" + companyName + "_final.csv", function (tweetsData) {
             loadTweetData(companyName, tweetsData);
         });
     }
 }
-
-
-
-// Changes the tweets view when the viewfinder is moved.
-function scrollTweetsView() {
-    myStartDate = startDate;
-    myEndDate = endDate;
-    myOldStartDate = oldStartDate;
-    myOldEndDate = oldEndDate;
-
-    console.log("SCROLL:  START DATE CHANGED: ", myStartDate);
-    console.log("SCROLL: END DATE CHANGED: ", myEndDate);
-    console.log("SCROLL: OLD START DATE CHANGED: ", myOldStartDate);
-    console.log("SCROLL: OLD END DATE CHANGED: ", myOldEndDate);
-
-    if (myStartDate < myOldStartDate && myOldEndDate === myOldEndDate) {
-        //add on extra 
-    } else if (myStartDate === myOldStartDate && myEndDate === myOldEndDate) {
-
-    } else if (myStartDate > myOldStartDate && myOldEndDate === myOldEndDate) {
-        //add on extra 
-
-    } else if (myStartDate < myOldStartDate && myEndDate < myOldEndDate) {
-
-    } else if (myStartDate === myOldStartDate && myOldEndDate < myOldEndDate) {
-        //add on extra 
-
-    } else if (myStartDate > myOldStartDate && myEndDate < myOldEndDate) {
-
-    } else if (myStartDate < myOldStartDate && myOldEndDate > myOldEndDate) {
-        //add on extra 
-
-    } else if (myStartDate === myOldStartDate && myEndDate > myOldEndDate) {
-
-    } else if (myStartDate > myOldStartDate && myEndDate > myOldEndDate) {
-
-    } else if (myEndDate < myOldStartDate) {
-
-    } else if (myStartDate > myOldEndDate) {
-
-    }
-}
-
 
 function parseDateAsInt(date) {
     var toReturn = new Date(null);
@@ -93,8 +51,6 @@ function parseDateAsInt(date) {
     }
     return toReturn;
 }
-
-
 
 // Scans through the data, makes 'buckets' for each bubble (keyword),
 // and aggregates the data for each bubble (keyword).
@@ -148,7 +104,7 @@ function initializeTweetsViewWithData() {
 }
 
 function loadSentiView() {
-   // $.getScript("js/vis.js", this);
+    // $.getScript("js/vis.js", this);
 }
 
 
@@ -185,7 +141,7 @@ function loadClusterView() {
 
     // Use the pack layout to initialize node positions.
     d3.layout.pack()
-        .sort(null)
+        .sort(clusterPadding)
         .size([width, height])
         .children(function (d) {
             return d.values;
@@ -244,6 +200,7 @@ function loadClusterView() {
                 return d.y;
             });
     }
+
 
     // Move d to be adjacent to the cluster node.
     function cluster(alpha) {
