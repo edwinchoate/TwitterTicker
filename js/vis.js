@@ -252,7 +252,6 @@
   ];
 
   $(function() {
-      console.log("hey");
     var display, key, plot, text;
     plot = Bubbles();
     display = function(data) {

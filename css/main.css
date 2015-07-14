@@ -16,6 +16,12 @@ p {
   font-size: 1.3em;
   padding-bottom: 25px;
 }
+#twitter-stats p {
+  font-size: 1.15em;
+}
+#twitter-stats .fa {
+  padding-left: 15px;
+}
 label {
   color: #dddddd;
   font-size: 1.15em;

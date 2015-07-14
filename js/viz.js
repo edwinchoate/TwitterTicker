@@ -7,7 +7,7 @@ function render(id, fData) {
      */
     var panelHeight = 50
     var width = $("#tweetsView").width() - 50
-    var height = 500;
+    var height = $("#tweetsView").height() - 50;
     var padding = 10
     var dustRadius = 5
     var magnetRadius = 20
@@ -18,26 +18,42 @@ function render(id, fData) {
     for (var key in p) {
         props.push(key)
     }
-
+    
     var keys = [
-        {name: 'RetailPrice'},
-        {name: 'EngineSize'},
-        {name: 'Cyl'},
-        {name: 'HP'},
-        {name: 'CityMPG'},
-        {name: 'HwyMPG'}
-        ]
+        {keyword: 'avgSentiment'},
+        {keyword: 'totalRT'},
+        {keyword: 'totalFav'}
+    ]
 
     // keep track of the magnets that are active (clicked)
     var activeMagnets = []
     keys.forEach(function(d) {
         //activeMagnets.push({name: d.name, active: false})
         // calculate the min and max for each
-        d.min = d3.min(fData, function(val) { return val[d.name]; })
-        d.max = d3.max(fData, function(val) { return val[d.name]; })
+        d.min = d3.min(fData, function(val) { return val[d.keyword]; })
+        d.max = d3.max(fData, function(val) { return val[d.keyword]; })
         d.active = false
         d.fill = '#666'
     })
+    
+    function getKeywordTitle (keyword) {
+        switch (keyword) {
+            case "avgSentiment":
+                return "Average Sentiment Score";
+                break;
+            case "totalRT":
+                return "Total Retweets";
+                break;
+            case "totalFav":
+                return "Total Favorites";
+                break;
+            case "totalPop":
+                return "Total Popularity";
+                break;
+            default:
+                return keyword;
+        }
+    }
 
     /**
      * Funtion to handle tooltips over the dust
@@ -47,7 +63,10 @@ function render(id, fData) {
                 .offset([-10, 0])
                 .html(function(d) {
                     console.log(d);
-                    return "<strong>"+ d.name +"</strong>";
+                    $("#tweet-display").text(d.topTweet);
+                    $("#num-retweets-display").text(d.topRT);
+                    $("#num-favorites-display").text(d.topFav);
+                    return "<strong>"+ getKeywordTitle(d.keyword) +"</strong>";
                 })
 
     var drag = d3.behavior.drag()
@@ -77,7 +96,7 @@ function render(id, fData) {
                 var x = d.x
                 keys.forEach(function(key) {
                     if (key.active == true) {
-                        var val = key.name
+                        var val = key.keyword
                         var dustVal = d[val]
                         // get the difference in distance
                         var deltaX = key.x - x
@@ -94,7 +113,7 @@ function render(id, fData) {
                 var y = d.y
                 keys.forEach(function(key) {
                     if (key.active == true) {
-                        var val = key.name
+                        var val = key.keyword
                         var dustVal = d[val]
                         // get the difference in distance
                         var deltaY = key.y - y
@@ -182,7 +201,9 @@ function render(id, fData) {
             return d.y;
         })
         .attr('r', 5)
-        .attr('fill', '#55acee')
+        .attr('fill', function () {
+            return "red";
+         })
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)
 }
