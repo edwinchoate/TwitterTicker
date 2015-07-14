@@ -8,18 +8,19 @@ function loadTweetData(companyName, tweetsData) {
         var unixTime = parseDateAsInt(d.date);
         var keyword = d.keyword;
         var keywordType = d.keywordType;
-        var sentiment = d.sentiment;
-        var sentimentType = d.sentimentType;
-        var id = d.id;
-        var tweet = d.tweet;
-        var retweets = d.retweets;
-        var favorites = d.favorites;
-        var popularity = d.popularity;
+        var sentiment = d.avgSentiment;
+        var totalRetweets = d.totalRT;
+        var totalFavorites = d.totalFav;
+        var totalPopularity = d.totalPop;
+        var topTweets = d.topTweet;
+        var topRetweets = d.topRT;
+        var topFavorites = d.topFav;
+        var topPopularity = d.topPop;
 
-        var dataArray = [keyword, keywordType, sentiment, sentimentType, id, tweet, retweets, favorites, popularity];
+        var dataArray = [keyword, keywordType, sentiment, totalRetweets, totalFavorites, totalPopularity, topTweets, topRetweets, topFavorites, topPopularity];
 
         if (dateToDataMap.hasValue(unixTime)) {
-            currentData = dateToDataMap.get(unixTime);
+            var currentData = dateToDataMap.get(unixTime);
             currentData.concat(dataArray);
         } else {
             currentData = dataArray;
@@ -140,6 +141,7 @@ function loadClusterView() {
     });
 
     // Use the pack layout to initialize node positions.
+
     d3.layout.pack()
         .sort(clusterPadding)
         .size([width, height])
