@@ -7,7 +7,7 @@ function render(id, fData) {
      */
     var panelHeight = 50
     var width = $("#tweetsView").width() - 50
-    var height = 450;
+    var height = 500;
     var padding = 10
     var dustRadius = 5
     var magnetRadius = 20

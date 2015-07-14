@@ -47,7 +47,7 @@ var NO_TWITTER_VIEW_SELECTED = "No Twitter View Selected";
 
 $(document).ready(function () {
     
-    companies = ["Amazon", "Apple", "Facebook", "Intel", "IBM", "Microsoft", "Google"];
+    companies = ["Amazon", "Apple", "Intel", "IBM", "Microsoft", "Google"];
     $("#filter-tweet-selector").slider();
 
     loadCompanies(companies);
@@ -254,7 +254,7 @@ function loadStockTimeline (data, start, end) {
         chart.focusHeight(70);
 
         chart.xAxis.tickFormat(function(d) {return d3.time.format('%m/%d/%y')(new Date(d))});
-        chart.x2Axis.axisLabel("Dates")
+        chart.x2Axis.axisLabel("Date")
                     .tickFormat(function(d) {return d3.time.format('%m/%d/%y')(new Date(d))});
 
         chart.yAxis.axisLabel("Stock Price ($USD)")
@@ -274,6 +274,8 @@ function initializeTweetsView () {
     
     // Init Magnet View and hide it
     initializeMagnetView();
+    initializeSentiView();
+    initializeClusterView();
 }
 
 function initializeMagnetView () {
@@ -281,6 +283,14 @@ function initializeMagnetView () {
     render('#magnet-view', stuff);
     
     $("#magnet-view, #senti-view, #cluster-view").hide();
+}
+
+function initializeSentiView () {
+    $.getScript("js/tweetsView.js", loadSentiView);
+}
+
+function initializeClusterView () {
+    $.getScript("js/tweetsView.js", loadClusterView);
 }
 
 function loadTweetLineDisplay () {

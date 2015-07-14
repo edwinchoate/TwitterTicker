@@ -19,6 +19,11 @@
         "/Users/edwinchoate/git/TwitterTicker/nvd3/src/utils.js",
         "/Users/edwinchoate/git/TwitterTicker/nvd3/src/tooltip.js",
         "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/pieChart.js",
-        "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/pie.js"
+        "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/pie.js",
+        "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/ohlcBar.js",
+        "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/multiChart.js",
+        "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/multiBarHorizontalChart.js",
+        "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/multiBarHorizontal.js",
+        "/Users/edwinchoate/git/TwitterTicker/nvd3/src/models/multiBarChart.js"
     ]
 }
