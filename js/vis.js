@@ -234,20 +234,8 @@
   texts = [
     {
       key: "sherlock",
-      file: "Apple_twitter.csv",
+      file: "Amazon_twitter.csv",
       name: "The Adventures of Steve Jobs"
-    }, {
-      key: "aesop",
-      file: "top_aesop.csv",
-      name: "Aesop's Fables"
-    }, {
-      key: "alice",
-      file: "alice.csv",
-      name: "Alice's Adventures in Wonderland"
-    }, {
-      key: "gulliver",
-      file: "top_gulliver.csv",
-      name: "Gulliver's Travels"
     }
   ];
 
