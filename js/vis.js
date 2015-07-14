@@ -252,17 +252,17 @@
     })[0];
     if (!text) {
       text = texts[0];
-    }
-    $("#text-select").val(key);
+    }   
+    //$("#text-select").val(key);
     d3.select("#jitter").on("input", function() {
       return plot.jitter(0.5);
     });
-    d3.select("#text-select").on("change", function(e) {
-      key = $(this).val();
-      location.replace("#");
-      return location.search = encodeURIComponent(key);
-    });
-    d3.select("#book-title").html(text.name);
+//    d3.select("#text-select").on("change", function(e) {
+//      key = $(this).val();
+//      location.replace("#");
+//      return location.search = encodeURIComponent(key);
+//    });
+    //d3.select("#book-title").html(text.name);
     return d3.csv("data/twitter/" + text.file, display);
   });
 

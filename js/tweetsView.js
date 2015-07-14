@@ -164,7 +164,7 @@ function initializeTweetsViewWithData(){
 }
 
 function loadSentiView() {
-    $.getScript("js/vis.js", this);
+   // $.getScript("js/vis.js", this);
 }
 
 
