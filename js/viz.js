@@ -36,8 +36,8 @@ function render(id, fData) {
         d.fill = '#666'
     })
     
-    function getKeywordTitle (keyword) {
-        switch (keyword) {
+    function getKeywordTitle (d) {
+        switch (d.keyword) {
             case "avgSentiment":
                 return "Average Sentiment Score";
                 break;
@@ -47,11 +47,8 @@ function render(id, fData) {
             case "totalFav":
                 return "Total Favorites";
                 break;
-            case "totalPop":
-                return "Total Popularity";
-                break;
             default:
-                return keyword;
+                return d.company + ": " + d.keyword;
         }
     }
 
@@ -63,10 +60,10 @@ function render(id, fData) {
                 .offset([-10, 0])
                 .html(function(d) {
                     console.log(d);
-                    $("#tweet-display").text(d.topTweet);
+                    $("#tweet-display").text(d.company+": "+d.topTweet);
                     $("#num-retweets-display").text(d.topRT);
                     $("#num-favorites-display").text(d.topFav);
-                    return "<strong>"+ getKeywordTitle(d.keyword) +"</strong>";
+                    return "<strong>"+ getKeywordTitle(d) +"</strong>";
                 })
 
     var drag = d3.behavior.drag()
@@ -201,8 +198,29 @@ function render(id, fData) {
             return d.y;
         })
         .attr('r', 5)
-        .attr('fill', function () {
-            return "red";
+        .attr('fill', function (d) {
+            switch(d.company) {
+                case "Amazon":
+                    return companyColors.Amazon;
+                    break;
+                case "Apple":
+                    return companyColors.Apple;
+                    break;
+                case "Intel":
+                    return companyColors.Intel;
+                    break;
+                case "IBM":
+                    return companyColors.IBM;
+                    break;
+                case "Microsoft":
+                    return companyColors.Microsoft;
+                    break;
+                case "Google":
+                    return companyColors.Google;
+                    break;
+                default:
+                    return "#55acee";
+            }
          })
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)

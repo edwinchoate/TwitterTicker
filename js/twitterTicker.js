@@ -7,6 +7,7 @@ var keywordToDataMap      = new LinkedHashMap();
 
 var selectedModeTag;
 var selectedModeName;
+var companyColors = {Amazon: "#E6E65C", Apple: "#cccccc", Intel: "#63D9DB", IBM: "#BB63DB", Microsoft: "#51C253", Google: "#EB832F"};
 
 var isTweetSelected = false;
 
@@ -84,6 +85,9 @@ $(document).ready(function () {
         if(currentCompany.hasClass("selected")) {
             var index = selectedCompanies.indexOf(currentCompanyName);
             currentCompany.removeClass("selected");
+            if (selectedCompanies.length <= 1) {
+                $("#please").fadeIn(650);   
+            }
             selectedCompanies.splice(index, 1);   
             removeCompany(currentCompanyName, index);
             $(this).closest("g").prependTo("#unselected-container");
@@ -162,6 +166,7 @@ function updateSelectionDates () {
 
 function addCompany(companyName, index) {
     console.log("Adding " + companyName + " to Stock Timeline...");
+    $("#please").hide();
     if(currentNumberOfCompanies == 0) {
         initializeStockTimeline(companyName, index);
     }
@@ -180,6 +185,7 @@ function removeCompany(companyName, index) {
     loadStockTimeline(stockFinalData, startDate, endDate);
     currentNumberOfCompanies = stockFinalData.length;
     
+    
     removeCompanyFromMagnetView(companyName, index);
 }
 
@@ -194,6 +200,8 @@ function loadStockData(companyName, index, pricesData) {
     });
 
     stockDataByCompany.values = stockDataToNum;
+    stockDataByCompany.color = companyColors[companyName];
+    
     stockFinalData[index] = stockDataByCompany;
 }
 
@@ -248,7 +256,7 @@ function loadStockTimeline (data, start, end) {
                     .x(function(d) { return d[0]; })
                     .y(function(d) { return d[1]; })
                     .duration(250)
-                    .color(d3.scale.category10().range())
+                    //.color(d3.scale.category10().range())
                     .clipVoronoi(false)
                     .showLegend(SHOW_LEGEND);
 
@@ -318,7 +326,7 @@ function removeCompanyFromMagnetView (companyName, index) {
             magnetData = magnetData.concat(tweetFinalData[i].slice(0, 200/selectedCompanies.length));   
         }
         $("#magnet-view").empty();
-        $.getScript("js/viz/js", render('#magnet-view', magnetData));
+        $.getScript("js/viz.js", render('#magnet-view', magnetData));
     } else {
         $("#magnet-view").empty();
     }
