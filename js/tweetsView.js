@@ -1,14 +1,14 @@
 //Changes the tweet view when a company is added or removed.
 function loadTwitterData() {
-    
+
     var myLength = selectedCompanies.length;
     for (var i = 0; i < myLength; i++) {
         companyName = selectedCompanies[i];
-        if(!companyToFinalDataMap.hasValue(companyName)){
+        if (!companyToFinalDataMap.hasValue(companyName)) {
             d3.csv("data/twitter/" + companyName + "_final.csv", function (tweetsData) {
                 addDataToHashMapFromCSV(companyName, tweetsData);
-            });       
-        } 
+            });
+        }
     }
 }
 
@@ -19,7 +19,7 @@ function addDataToHashMapFromCSV(companyName, tweetsData) {
     tweetsData.map(function (d) {
 
         var keyword = d.keyword;
-        
+
         var keywordType = d.keywordType;
         var sentiment = d.avgSentiment;
         var totalRetweets = d.totalRT;
@@ -30,23 +30,23 @@ function addDataToHashMapFromCSV(companyName, tweetsData) {
         var topFavorites = d.topFav;
         var topPopularity = d.topPop;
         var dates = [];
-        
+
         var hasMoreDates = true;
         var count = 0;
-        while(hasMoreDates){
+        while (hasMoreDates) {
             var colName = "date" + count;
             var currentDate = d[colName];
-            
-            if(currentDate === null || currentDate == ""){
+
+            if (currentDate === null || currentDate == "") {
                 hasMoreDates = false;
             } else {
                 dates.push(currentDate);
                 count += 1;
             }
         }
-        
+
         var dataArray = [keywordType, sentiment, totalRetweets, totalFavorites, totalPopularity, topTweets, topRetweets, topFavorites, topPopularity, dates];
-        
+
         keywordToDataMap.put(keyword, dataArray);
     });
     companyToFinalDataMap.put(companyName, keywordToDataMap);
@@ -119,7 +119,7 @@ function initializeTweetsViewWithData() {
 }
 
 function loadSentiView() {
-    // $.getScript("js/vis.js", this);
+    $.getScript("js/vis.js", this);
 }
 
 
