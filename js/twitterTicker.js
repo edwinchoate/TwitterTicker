@@ -1,5 +1,7 @@
 var stockFinalData = [];
 var magnetFinalData = [];
+var clusterFinalData = [];
+var sentiFinalData = [];
 var selectedCompanies = [];
 var currentDisplayedKeywords = [];
 
@@ -150,9 +152,9 @@ function loadTweetsView() {
 
     console.log("Selected Start Date:", startDate + "\nSelected End Date:", endDate);
 
-    var hashtable = $.getScript("js/tweetsView.js", loadTwitterData);
-    console.log("HASH MASH", hashtable);
-    $.getScript("js/vis.js", updateSentiView(hashtable));
+    //    var hashtable = $.getScript("js/tweetsView.js", loadTwitterData);
+    //    console.log("HASH MASH", hashtable);
+    $.getScript("js/vis.js", renderSentiView);
 }
 
 function addCompany(companyName, index) {
@@ -165,6 +167,8 @@ function addCompany(companyName, index) {
     }
 
     addCompanyToMagnetView(companyName, index);
+    // addCompanyToSentiView(companyName, index);
+    addCompanyToClusterView(companyName, index);
 
     console.log(stockFinalData);
 }
@@ -175,8 +179,10 @@ function removeCompany(companyName, index) {
     loadStockTimeline(stockFinalData, startDate, endDate);
     currentNumberOfCompanies = stockFinalData.length;
 
-
     removeCompanyFromMagnetView(companyName, index);
+    removeCompanyFromClusterView(companyName, index);
+    // removeCompanyFromSentiView(companyName, index);
+
 }
 
 function loadStockData(companyName, index, pricesData) {
@@ -303,12 +309,47 @@ function initializeMagnetView(companyName, index) {
 
 }
 
+
+// CLUSTER VIEW
+
+function addCompanyToClusterView(companyName, index) {
+    d3.csv("data/twitter/" + companyName + "_twitter_keyword_data_top_200.csv", function (d) {
+        clusterFinalData.splice(index, 0, d);
+        var magnetData = [];
+        for (var i = 0; i < clusterFinalData.length; i++) {
+            magnetData = magnetData.concat(clusterFinalData[i].slice(0, NUM_BUBBLES / selectedCompanies.length));
+        }
+        $("#cluster-view").empty();
+        $.getScript("js/tweetsView.js", loadClusterView(magnetData));
+    });
+
+    console.log("clusterFinalData:", clusterFinalData);
+}
+
+function removeCompanyFromClusterView(companyName, index) {
+    clusterFinalData.splice(index, 1);
+
+    if (selectedCompanies.length > 0) {
+        var magnetData = [];
+        for (var i = 0; i < clusterFinalData.length; i++) {
+            magnetData = magnetData.concat(clusterFinalData[i].slice(0, NUM_BUBBLES / selectedCompanies.length));
+        }
+        $("#cluster-view").empty();
+        $.getScript("js/tweetsView.js", loadClusterView(magnetData));
+    } else {
+        $("#cluster-view").empty();
+    }
+}
+
+
+// MAGNET VIEW
+
 function addCompanyToMagnetView(companyName, index) {
     d3.csv("data/twitter/" + companyName + "_twitter_keyword_data_top_200.csv", function (d) {
         magnetFinalData.splice(index, 0, d);
         var magnetData = [];
         for (var i = 0; i < magnetFinalData.length; i++) {
-            magnetData = magnetData.concat(magnetFinalData[i].slice(0, 200 / selectedCompanies.length));
+            magnetData = magnetData.concat(magnetFinalData[i].slice(0, NUM_BUBBLES / selectedCompanies.length));
         }
         $("#magnet-view").empty();
         $.getScript("js/viz.js", render('#magnet-view', magnetData));
@@ -317,13 +358,44 @@ function addCompanyToMagnetView(companyName, index) {
     console.log("magnetFinalData:", magnetFinalData);
 }
 
+function addCompanyToSentiView(companyName, index) {
+    d3.csv("data/twitter/" + companyName + "_twitter_keyword_data_top_200.csv", function (d) {
+        sentiFinalData.splice(index, 0, d);
+        var sentiData = [];
+        var myLength = sentiFinalData.length;
+        for (var i = 0; i < myLength; i++) {
+            sentiData = sentiData.concat(sentiFinalData[i].slice(0, NUM_BUBBLES / myLength));
+        }
+        $("#senti-view").empty();
+        $.getScript("js/viz.js", render('#senti-view', sentiData));
+    });
+
+    console.log("magnetFinalData:", sentiFinalData);
+}
+
+function removeCompanyFromSentiView(companyName, index) {
+    sentiFinalData.splice(index, 1);
+
+    if (selectedCompanies.length > 0) {
+        var sentiData = [];
+        var myLength = sentiFinalData.length;
+        for (var i = 0; i < myLength; i++) {
+            sentiData = sentiData.concat(sentiFinalData[i].slice(0, NUM_BUBBLES / myLength));
+        }
+        $("#senti-view").empty();
+        $.getScript("js/viz.js", render('#senti-view', sentiData));
+    } else {
+        $("#senti-view").empty();
+    }
+}
+
 function removeCompanyFromMagnetView(companyName, index) {
     magnetFinalData.splice(index, 1);
 
     if (selectedCompanies.length > 0) {
         var magnetData = [];
         for (var i = 0; i < magnetFinalData.length; i++) {
-            magnetData = magnetData.concat(magnetFinalData[i].slice(0, 200 / selectedCompanies.length));
+            magnetData = magnetData.concat(magnetFinalData[i].slice(0, NUM_BUBBLES / selectedCompanies.length));
         }
         $("#magnet-view").empty();
         $.getScript("js/viz.js", render('#magnet-view', magnetData));

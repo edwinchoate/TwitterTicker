@@ -134,7 +134,7 @@ function parseDateAsInt(date) {
 
 
 // Creates the Twitter Cluster View. Code from http://bl.ocks.org/mbostock/7882658
-function loadClusterView() {
+function loadClusterView(clusterData) {
 
     var width = 500,
         height = 330,
@@ -161,6 +161,46 @@ function loadClusterView() {
         if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
         return d;
     });
+
+    //console.log("NOdes", nodes);
+    console.log("real clusters", clusters);
+    var nodes1 = [];
+    var clusters1 = new Array(m);
+    var maxPop = clusterData[0].totalPop;
+    //console.log("mex pap", clusterData[0]);
+
+    var data = 0;
+    var myCompany = "Amazon";
+    var myPop = 1;
+    var clusterVal = 0;
+
+    for (var i = 0; i < n; i++) {
+
+        if (selectedCompanies.length > 0) {
+            data = clusterData[i];
+            myCompany = data.company;
+            myPop = data.totalPop;
+            console.log(myCompany);
+            clusterVal = selectedCompanies.indexOf(myCompany);
+        }
+        var swert = -Math.log(myPop / maxPop + 0.00000001);
+        var r = Math.sqrt(swert) * maxRadius;
+        console.log("SWERT", swert);
+        console.log("MAXPOP", maxPop);
+        var d = {
+            cluster: clusterVal,
+            radius: r
+        }
+        console.log("DATA", data);
+        console.log("MY COMPANY", myCompany);
+        console.log("myPOP", myPop);
+        console.log("clusterVal", clusterVal);
+        console.log("RADIOUS", r);
+        if (!clusters1[clusterVal] || (r > clusters1[clusterVal].radius)) clusters1[clusterVal] = d;
+        nodes1.push(d);
+    }
+    console.log("nodes", nodes1);
+    console.log("clusters", clusters1);
 
     // Use the pack layout to initialize node positions.
 
