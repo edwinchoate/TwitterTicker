@@ -262,7 +262,6 @@ function updateSentiView() {
         console.log("databetaman", data);
         display = plotData("#vis", data, plot);
     });
-}).call(this);
 }
 
 function loadSentimentData() {
@@ -271,6 +270,7 @@ function loadSentimentData() {
     for (var i = 0; i < myLength; i++) {
         companyName = selectedCompanies[i];
         var keywordToDataMap = companyToFinalDataMap.get(companyName);
+        console.log("COMPANY ALL", companyToFinalDataMap.getAll());
         var keyset = keywordToDataMap.getAllKeys();
         for (var j = 0; j < NUM_BUBBLES / myLength && j < keyset.length; j++) {
             currentKeyword = keyset[j];

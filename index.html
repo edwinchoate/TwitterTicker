@@ -1,212 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        
-        <title>TwitterTicker</title>
-        
-        <meta charset="utf-8">
-        <meta name="application-name" content="TwitterTicker">
-        <meta name="author" content="">
-        <meta name="description" content="">
-        <meta name="keywords" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">      
-        
-        <!-- Bootstrap Core CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Custom Fonts -->
-        <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href='http://fonts.googleapis.com/css?family=Oxygen:300' rel='stylesheet' type='text/css'>      
-        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,200italic,300italic' rel='stylesheet' type='text/css'>
-        
-        <!-- D3 (necessary dependent for NVD3.js) -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
-        <script src="nvd3/build/nv.d3.min.js"></script>
-        <link href="nvd3/build/nv.d3.css" rel="stylesheet" type="text/css">
-        <script src="nvd3/examples/lib/stream_layers.js"></script>
-        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-        
-        <!-- Dust and Magnets Vis https://github.com/koek67/d3-dust-and-magnet -->
-        <script src="assets/data.js"></script>
-        <script type="text/javascript" src="js/viz.js"></script>
-        
-        <!-- Custom CSS -->
-        <link href="css/main.css" rel="stylesheet"> 
-        <link href="css/style.css" rel="stylesheet"> 
-    </head>
-    <body>
-        
-        <!--Navbar-->
-        <nav class="navbar navbar-inverse">
-          <div class="container-fluid">
+<head>
+
+    <title>TwitterTicker</title>
+
+    <meta charset="utf-8">
+    <meta name="application-name" content="TwitterTicker">
+    <meta name="author" content="">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Oxygen:300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,200italic,300italic' rel='stylesheet' type='text/css'>
+
+    <!-- D3 (necessary dependent for NVD3.js) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+    <script src="nvd3/build/nv.d3.min.js"></script>
+    <link href="nvd3/build/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="nvd3/examples/lib/stream_layers.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+    <!-- Dust and Magnets Vis https://github.com/koek67/d3-dust-and-magnet -->
+    <script src="assets/data.js"></script>
+    <script type="text/javascript" src="js/viz.js"></script>
+
+    <!-- Custom CSS -->
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!--Navbar-->
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="index.html">
-                <img id="navbar-icon" src="img/TwitterTicker_logo.png" alt="TwitterTicker Icon"> TwitterTicker
-              </a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">
+                    <img id="navbar-icon" src="img/TwitterTicker_logo.png" alt="TwitterTicker Icon"> TwitterTicker
+                </a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="navbar-right collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav">
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="help.html">Help</a></li>
-              </ul>
-            </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-fluid -->
-        </nav>
-        
-        
-        <main>
-        
-            <div id="intro-pane" class="container collapse in">
-                <div>
-                    <div class="row">
-                        <div class="col-xs-10 col-xs-offset-1">
-                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                                <img src="img/TwitterTicker_logo.png" alt="TwitterTicker Logo">
-                            </div>
-                            <div class="col-lg-9 col-md-8 col-sm-6 col-xs-12">
-                                <h1 id="title"><i>TwitterTicker</i></h1>
-                                <h4 class="lead">&#8212; A visualization that shows how your tweets make a difference in the stock market</h4>                      
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="help.html">Help</a></li>
+                </ul>
             </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
 
 
-            <div class="container">
-                <div class="row text-center">
-                    <a class="btn" role="button" data-toggle="collapse" data-target="#intro-pane"></a>
-                </div>
-            </div>
+    <main>
 
-            <br>
-
-
-            <!-- Actual Vis Goes Here! -->
-            <div class="container">
-
+        <div id="intro-pane" class="container collapse in">
+            <div>
                 <div class="row">
-                    <!-- First half of vis -->
-                    <div class="well well-lg">
-                        
-                        <div class="row">
-                            <!-- Select Companies pane -->
-                            <div class="col-sm-3 col-xs-12">
-                                <h3>Select Companies</h3>
-                                <form id="company-selector">
-                                    <div id="selected-container"></div>
-                                    <hr>
-                                    <div id="unselected-container"></div>
-                                </form>
-                            </div>
-                            <!-- Stock Timeline part of the vis -->
-                            <div class="col-sm-9 col-xs-12">
-                                <div id="chart">
-                                    <h3 id="please">Please select a company.</h3>
-                                    <svg></svg>
-                                </div>
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <img src="img/TwitterTicker_logo.png" alt="TwitterTicker Logo">
+                        </div>
+                        <div class="col-lg-9 col-md-8 col-sm-6 col-xs-12">
+                            <h1 id="title"><i>TwitterTicker</i></h1>
+                            <h4 class="lead">&#8212; A visualization that shows how your tweets make a difference in the stock market</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+            <div class="row text-center">
+                <a class="btn" role="button" data-toggle="collapse" data-target="#intro-pane"></a>
+            </div>
+        </div>
+
+        <br>
+
+
+        <!-- Actual Vis Goes Here! -->
+        <div class="container">
+
+            <div class="row">
+                <!-- First half of vis -->
+                <div class="well well-lg">
+
+                    <div class="row">
+                        <!-- Select Companies pane -->
+                        <div class="col-sm-3 col-xs-12">
+                            <h3>Select Companies</h3>
+                            <form id="company-selector">
+                                <div id="selected-container"></div>
+                                <hr>
+                                <div id="unselected-container"></div>
+                            </form>
+                        </div>
+                        <!-- Stock Timeline part of the vis -->
+                        <div class="col-sm-9 col-xs-12">
+                            <div id="chart">
+                                <h3 id="please">Please select a company.</h3>
+                                <svg></svg>
                             </div>
                         </div>
-                        
-                    </div>
-                    
-                    <!-- A line that displays details for the currently selected tweet/keyword -->
-                    <div id="twitter-stats">
-                        <p><span id="tweet-display"></span>
-                        <i class="fa fa-retweet"></i> <span id="num-retweets-display"></span> 
-                        <i class="fa fa-star"></i> <span id="num-favorites-display"></span>
-                        </p>
                     </div>
 
-                    <!-- Second half of vis -->
-                    <div class="well well-lg">
-                        
-                        <div class="row">
-                            <!-- View Selection Pane -->
-                            <div class="col-sm-3 col-xs-12">
-                                <h3>View Options</h3>
-                                <form id="view-mode-selector">
-                                    <g id="magnet-input">
-                                        <input type="radio" id="magnet" name="view-mode" checked>
-                                        <label for="magnet">Magnet View</label><br>
-                                    </g>
-                                    <g id="senti-input jitter">
-                                        <input type="radio" id="senti" name="view-mode">
-                                        <label for="senti">Sentiment vs Quality</label><br>
-                                    </g>
-                                    <g id="cluster-input">
-                                        <input type="radio" id="cluster" name="view-mode">
-                                        <label for="cluster">Cluster View</label><br>
-                                    </g>
-                                </form>
-                                <h3>Filter Keywords</h3>
-                                <form id="filter-mode-selector">
-                                    <g id="hashtags-input">
-                                        <input type="checkbox" id="hashtags" checked>
-                                        <label class="selected" for="hashtags"><strong>#</strong> Hashtags</label><br>
-                                    </g>
-                                    <g id="usernames-input">
-                                        <input type="checkbox" id="usernames" checked>
-                                        <label class="selected" for="usernames"><i class="fa fa-user"></i> Usernames</label><br>
-                                    </g>
-                                    <g id="links-input">
-                                        <input type="checkbox" id="links" checked>
-                                        <label class="selected" for="links"><i class="fa fa-link"></i> Links</label><br>
-                                    </g>
-                                    <g id="keywords-input">
-                                        <input type="checkbox" id="keywords" checked>
-                                        <label class="selected" for="keywords"><i class="fa fa-bullseye"></i> Other Keywords</label><br>
-                                    </g>
-                                </form>
-                                <h3>Filter Tweets</h3>
-                                <form id="filter-tweet-selector"></form>
-                            </div>
-                            <!-- Twitter view part of the vis -->
-                            <div class="col-sm-9 col-xs-12">
-                                <div id="tweetsView">
-                                    
-                                    <div id="magnet-view"></div>
-                                    
-                                    <div id="senti-view">
-                                        <div id="vis"></div>
-                                    </div>
-                                    
-                                    <div id="cluster-view"></div>
-                                    
+                </div>
+
+                <!-- A line that displays details for the currently selected tweet/keyword -->
+                <div id="twitter-stats">
+                    <p><span id="tweet-display"></span>
+                        <i class="fa fa-retweet"></i> <span id="num-retweets-display"></span>
+                        <i class="fa fa-star"></i> <span id="num-favorites-display"></span>
+                    </p>
+                </div>
+
+                <!-- Second half of vis -->
+                <div class="well well-lg">
+
+                    <div class="row">
+                        <!-- View Selection Pane -->
+                        <div class="col-sm-3 col-xs-12">
+                            <h3>View Options</h3>
+                            <form id="view-mode-selector">
+                                <g id="magnet-input">
+                                    <input type="radio" id="magnet" name="view-mode" checked>
+                                    <label for="magnet">Magnet View</label>
+                                    <br>
+                                </g>
+                                <g id="senti-input jitter">
+                                    <input type="radio" id="senti" name="view-mode">
+                                    <label for="senti">Sentiment vs Quality</label>
+                                    <br>
+                                </g>
+                                <g id="cluster-input">
+                                    <input type="radio" id="cluster" name="view-mode">
+                                    <label for="cluster">Cluster View</label>
+                                    <br>
+                                </g>
+                            </form>
+                            <h3>Filter Keywords</h3>
+                            <form id="filter-mode-selector">
+                                <g id="hashtags-input">
+                                    <input type="checkbox" id="hashtags" checked>
+                                    <label class="selected" for="hashtags"><strong>#</strong> Hashtags</label>
+                                    <br>
+                                </g>
+                                <g id="usernames-input">
+                                    <input type="checkbox" id="usernames" checked>
+                                    <label class="selected" for="usernames"><i class="fa fa-user"></i> Usernames</label>
+                                    <br>
+                                </g>
+                                <g id="links-input">
+                                    <input type="checkbox" id="links" checked>
+                                    <label class="selected" for="links"><i class="fa fa-link"></i> Links</label>
+                                    <br>
+                                </g>
+                                <g id="keywords-input">
+                                    <input type="checkbox" id="keywords" checked>
+                                    <label class="selected" for="keywords"><i class="fa fa-bullseye"></i> Other Keywords</label>
+                                    <br>
+                                </g>
+                            </form>
+                            <h3>Filter Tweets</h3>
+                            <form id="filter-tweet-selector"></form>
+                        </div>
+                        <!-- Twitter view part of the vis -->
+                        <div class="col-sm-9 col-xs-12">
+                            <div id="tweetsView">
+
+                                <div id="magnet-view"></div>
+
+                                <div id="senti-view">
+                                    <div id="vis"></div>
                                 </div>
+
+                                <div id="cluster-view"></div>
+
                             </div>
                         </div>
-                        
                     </div>
 
                 </div>
 
             </div>
-            <!-- End of vis -->
-            
-        </main>
-        
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="js/jquery.min.js"></script>
-        
-        <!-- jQuery UI Components -->
-        <link rel="stylesheet" href="jquery-ui/jquery-ui.css">
-        <script src="jquery-ui/jquery-ui.js"></script>
-        
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/LinkedHashMapImplementation.js"></script>
-        <script src="js/twitterTicker.js"></script>
-        <script src="js/tweetsView.js"> </script>
-        
-    </body>
+
+        </div>
+        <!-- End of vis -->
+
+    </main>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery.min.js"></script>
+
+    <!-- jQuery UI Components -->
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.css">
+    <script src="jquery-ui/jquery-ui.js"></script>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/LinkedHashMapImplementation.js"></script>
+    <script src="js/twitterTicker.js"></script>
+    <script src="js/tweetsView.js"></script>
+    <script src="js/vis.js"></script>
+
+</body>
+
 </html>

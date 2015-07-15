@@ -2,7 +2,7 @@ var stockFinalData = [];
 var magnetFinalData = [];
 var selectedCompanies = [];
 var currentDisplayedKeywords = [];
-var companyToFinalDataMap = new LinkedHashMap();
+var companyToFinalDataMap = new Map();
 
 var selectedModeTag;
 var selectedModeName;

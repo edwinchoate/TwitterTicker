@@ -9,6 +9,8 @@ function loadTwitterData() {
             });
         }
     }
+    console.log(companyToFinalDataMap);
+    $.getScript("js/vis.js", updateSentiView);
 }
 
 // Parses csv to get tweet data
