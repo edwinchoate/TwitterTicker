@@ -149,26 +149,28 @@ function loadClusterView(clusterData) {
         .domain(d3.range(m));
 
     // The largest node for each cluster.
-    var clusters = new Array(m);
+    // var clusters = new Array(m);
 
-    var nodes = d3.range(n).map(function () {
-        var i = Math.floor(Math.random() * m),
-            r = Math.sqrt((i + 1) / m * -Math.log(Math.random())) * maxRadius,
-            d = {
-                cluster: i,
-                radius: r
-            };
-        if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
-        return d;
-    });
+    // var nodes = d3.range(n).map(function () {
+    //     var i = Math.floor(Math.random() * m),
+    //         r = Math.sqrt((i + 1) / m * -Math.log(Math.random())) * maxRadius,
+    //         d = {
+    //             cluster: i,
+    //             radius: r
+    //         };
+    //     if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
+    //     return d;
+    // });
 
     //console.log("NOdes", nodes);
-    console.log("real clusters", clusters);
-    var nodes1 = [];
-    var clusters1 = new Array(m);
+    //console.log("real clusters", clusters);
+    var nodes = [];
+    var clusters = new Array(m);
     var maxPop = clusterData[0].totalPop;
     //console.log("mex pap", clusterData[0]);
-
+    if(typeof maxPop === "undefined") {
+        maxPop = 1;
+    }
     var data = 0;
     var myCompany = "Amazon";
     var myPop = 1;
@@ -178,29 +180,28 @@ function loadClusterView(clusterData) {
 
         if (selectedCompanies.length > 0) {
             data = clusterData[i];
+            //console.log("DATA", data);
             myCompany = data.company;
             myPop = data.totalPop;
-            console.log(myCompany);
+            //console.log(myCompany);
             clusterVal = selectedCompanies.indexOf(myCompany);
         }
         var swert = -Math.log(myPop / maxPop + 0.00000001);
-        var r = Math.sqrt(swert) * maxRadius;
-        console.log("SWERT", swert);
-        console.log("MAXPOP", maxPop);
+
+        var r = Math.sqrt(Math.abs(swert)) * maxRadius;
+        // console.log("SWERT", swert);
+        // console.log("MAXPOP", maxPop);
         var d = {
             cluster: clusterVal,
-            radius: r
+            radius: r/2,
+            company: myCompany,
+            keyword: data.keyword
         }
-        console.log("DATA", data);
-        console.log("MY COMPANY", myCompany);
-        console.log("myPOP", myPop);
-        console.log("clusterVal", clusterVal);
-        console.log("RADIOUS", r);
-        if (!clusters1[clusterVal] || (r > clusters1[clusterVal].radius)) clusters1[clusterVal] = d;
-        nodes1.push(d);
+        if (!clusters[clusterVal] || (r > clusters[clusterVal].radius)) clusters[clusterVal] = d;
+        nodes.push(d);
     }
-    console.log("nodes", nodes1);
-    console.log("clusters", clusters1);
+    //console.log("nodes", nodes);
+    console.log("clusters", clusters);
 
     // Use the pack layout to initialize node positions.
 
@@ -236,11 +237,32 @@ function loadClusterView(clusterData) {
     var node = svg.selectAll("circle")
         .data(nodes)
         .enter().append("circle")
-        .style("fill", function (d) {
-            return color(d.cluster);
+        .attr('fill', function (d) {
+            switch (d.company) {
+                case "Amazon":
+                    return companyColors.Amazon;
+                    break;
+                case "Apple":
+                    return companyColors.Apple;
+                    break;
+                case "Intel":
+                    return companyColors.Intel;
+                    break;
+                case "IBM":
+                    return companyColors.IBM;
+                    break;
+                case "Microsoft":
+                    return companyColors.Microsoft;
+                    break;
+                case "Google":
+                    return companyColors.Google;
+                    break;
+                default:
+                    return "#55acee";
+            }
         })
         .call(force.drag);
-
+        
     node.transition()
         .duration(750)
         .delay(function (d, i) {
@@ -265,6 +287,40 @@ function loadClusterView(clusterData) {
             });
     }
 
+    function getKeywordTitle(d) {
+        switch (d.keyword) {
+            case "avgSentiment":
+                return "Average Sentiment Score";
+                break;
+            case "totalRT":
+                return "Total Retweets";
+                break;
+            case "totalFav":
+                return "Total Favorites";
+                break;
+            default:
+                $("#tweet-display").text(d.company + ": " + d.topTweet);
+                $("#num-retweets-display").text(d.topRT);
+                $("#num-favorites-display").text(d.topFav);
+                return d.keyword + "<hr>" +
+                    "Company: " + d.company + "<br><br>" +
+                    "Top <i class=\"fa fa-retweet\"></i>'s: " + d.topRT + "<br>" +
+                    "Top <i class=\"fa fa-star\"></i>'s: " + d.topFav + "<br><br>" +
+                    "Total <i class=\"fa fa-retweet\"></i>'s: " + d.totalRT + "<br>" +
+                    "Total <i class=\"fa fa-star\"></i>'s: " + d.totalFav + "<br>";
+        }
+    }
+
+    /**
+     * Funtion to handle tooltips over the dust
+     */
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function (d) {
+            ////console.log(d);
+            return "<strong>" + getKeywordTitle(d) + "</strong>";
+        })
 
     // Move d to be adjacent to the cluster node.
     function cluster(alpha) {

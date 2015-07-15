@@ -313,13 +313,14 @@ function initializeMagnetView(companyName, index) {
 // CLUSTER VIEW
 
 function addCompanyToClusterView(companyName, index) {
-    d3.csv("data/twitter/" + companyName + "_twitter_keyword_data_top_200.csv", function (d) {
+    d3.csv("data/twitter/" + companyName + "_final.csv", function (d) {
         clusterFinalData.splice(index, 0, d);
         var magnetData = [];
         for (var i = 0; i < clusterFinalData.length; i++) {
             magnetData = magnetData.concat(clusterFinalData[i].slice(0, NUM_BUBBLES / selectedCompanies.length));
         }
         $("#cluster-view").empty();
+        console.log("MAGNTDATA", magnetData);
         $.getScript("js/tweetsView.js", loadClusterView(magnetData));
     });
 
@@ -345,7 +346,7 @@ function removeCompanyFromClusterView(companyName, index) {
 // MAGNET VIEW
 
 function addCompanyToMagnetView(companyName, index) {
-    d3.csv("data/twitter/" + companyName + "_twitter_keyword_data_top_200.csv", function (d) {
+    d3.csv("data/twitter/" + companyName + "_final.csv", function (d) {
         magnetFinalData.splice(index, 0, d);
         var magnetData = [];
         for (var i = 0; i < magnetFinalData.length; i++) {
@@ -359,7 +360,7 @@ function addCompanyToMagnetView(companyName, index) {
 }
 
 function addCompanyToSentiView(companyName, index) {
-    d3.csv("data/twitter/" + companyName + "_twitter_keyword_data_top_200.csv", function (d) {
+    d3.csv("data/twitter/" + companyName + "_final.csv", function (d) {
         sentiFinalData.splice(index, 0, d);
         var sentiData = [];
         var myLength = sentiFinalData.length;
