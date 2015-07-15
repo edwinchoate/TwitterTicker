@@ -1,12 +1,25 @@
+//Changes the tweet view when a company is added or removed.
+function loadTwitterData() {
+    
+    var myLength = selectedCompanies.length;
+    for (var i = 0; i < myLength; i++) {
+        companyName = selectedCompanies[i];
+        if(!companyToFinalDataMap.hasValue(companyName)){
+            d3.csv("data/twitter/" + companyName + "_final.csv", function (tweetsData) {
+                addDataToHashMapFromCSV(companyName, tweetsData);
+            });       
+        } 
+    }
+}
+
 // Parses csv to get tweet data
-function loadTweetData(companyName, tweetsData) {
-
-    var dateToDataMap = new LinkedHashMap();
+function addDataToHashMapFromCSV(companyName, tweetsData) {
     //Get the values for tweetDataByCompany
-    var keywordData = tweetsData.map(function (d) {
+    var keywordToDataMap = new LinkedHashMap();
+    tweetsData.map(function (d) {
 
-        var unixTime = parseDateAsInt(d.date);
         var keyword = d.keyword;
+        
         var keywordType = d.keywordType;
         var sentiment = d.avgSentiment;
         var totalRetweets = d.totalRT;
@@ -16,31 +29,32 @@ function loadTweetData(companyName, tweetsData) {
         var topRetweets = d.topRT;
         var topFavorites = d.topFav;
         var topPopularity = d.topPop;
-
-        var dataArray = [keyword, keywordType, sentiment, totalRetweets, totalFavorites, totalPopularity, topTweets, topRetweets, topFavorites, topPopularity];
-
-        if (dateToDataMap.hasValue(unixTime)) {
-            var currentData = dateToDataMap.get(unixTime);
-            currentData.concat(dataArray);
-        } else {
-            currentData = dataArray;
+        var dates = [];
+        
+        var hasMoreDates = true;
+        var count = 0;
+        while(hasMoreDates){
+            var colName = "date" + count;
+            var currentDate = d[colName];
+            
+            if(currentDate === null || currentDate == ""){
+                hasMoreDates = false;
+            } else {
+                dates.push(currentDate);
+                count += 1;
+            }
         }
-        dateToDataMap.put(unixTime, currentData);
+        
+        var dataArray = [keywordType, sentiment, totalRetweets, totalFavorites, totalPopularity, topTweets, topRetweets, topFavorites, topPopularity, dates];
+        
+        keywordToDataMap.put(keyword, dataArray);
     });
-    companyToFinalDataMap.put(companyName, dateToDataMap);
-    initializeTweetsViewWithData();
-    console.log("DATE TO DATA MAP", dateToDataMap);
+    companyToFinalDataMap.put(companyName, keywordToDataMap);
 }
 
-//Changes the tweet view when a company is added or removed.
-function loadTwitterData() {
-    var myLength = selectedCompanies.length;
-    for (var i = 0; i < myLength; i++) {
-        companyName = selectedCompanies[i];
-        d3.csv("data/twitter/" + companyName + "_final.csv", function (tweetsData) {
-            loadTweetData(companyName, tweetsData);
-        });
-    }
+//Given a keyword, return an array containing the dates for that company
+function getDatesFromHashMap(keyword, company) {
+    return companyToFinalDataMap.get[9];
 }
 
 function parseDateAsInt(date) {
