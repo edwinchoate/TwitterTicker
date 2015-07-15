@@ -48,7 +48,15 @@ function render(id, fData) {
                 return "Total Favorites";
                 break;
             default:
-                return d.company + ": " + d.keyword;
+                $("#tweet-display").text(d.company+": "+d.topTweet);
+                $("#num-retweets-display").text(d.topRT);
+                $("#num-favorites-display").text(d.topFav);
+                return d.keyword + "<hr>" +
+                        "Company: " + d.company + "<br><br>" +
+                        "Top <i class=\"fa fa-retweet\"></i>'s: " + d.topRT + "<br>" +
+                        "Top <i class=\"fa fa-star\"></i>'s: " + d.topFav + "<br><br>" +
+                        "Total <i class=\"fa fa-retweet\"></i>'s: " + d.totalRT + "<br>" +
+                        "Total <i class=\"fa fa-star\"></i>'s: " + d.totalFav + "<br>";
         }
     }
 
@@ -60,10 +68,7 @@ function render(id, fData) {
                 .offset([-10, 0])
                 .html(function(d) {
                     console.log(d);
-                    $("#tweet-display").text(d.company+": "+d.topTweet);
-                    $("#num-retweets-display").text(d.topRT);
-                    $("#num-favorites-display").text(d.topFav);
-                    return "<strong>"+ getKeywordTitle(d) +"</strong>";
+                    return "<strong>" + getKeywordTitle(d) + "</strong>";
                 })
 
     var drag = d3.behavior.drag()
