@@ -1,67 +1,125 @@
 //Changes the tweet view when a company is added or removed.
 function loadTwitterData() {
+    var companyToFinalDataMap = new Map();
     var myLength = selectedCompanies.length;
     for (var i = 0; i < myLength; i++) {
         companyName = selectedCompanies[i];
-        if (!companyToFinalDataMap.hasValue(companyName)) {
+        if (!companyToFinalDataMap.has(companyName)) {
             d3.csv("data/twitter/" + companyName + "_final.csv", function (tweetsData) {
-                addDataToHashMapFromCSV(companyName, tweetsData);
+                console.log("BEGIN");
+                //addDataToHashMapFromCSV(companyName, tweetsData);
+                //Get the values for tweetDataByCompany
+                var keywordToDataMap = new Map();
+                var maxCount = NUM_BUBBLES / currentNumberOfCompanies;
+                var rowcount = 0;
+                console.log("TWEETS DATA", tweetsData);
+
+                for (var i = 0; i < tweetsData.length && i < maxCount; i++) {
+                    currentRow = tweetsData[i];
+                    [currentRow].map(function (d) {
+                        var keyword = d.keyword;
+
+                        var keywordType = d.keywordType;
+                        var sentiment = d.avgSentiment;
+                        var totalRetweets = d.totalRT;
+                        var totalFavorites = d.totalFav;
+                        var totalPopularity = d.totalPop;
+                        var topTweets = d.topTweet;
+                        var topRetweets = d.topRT;
+                        var topFavorites = d.topFav;
+                        var topPopularity = d.topPop;
+                        var dates = [];
+
+                        var hasMoreDates = true;
+                        var count = 0;
+                        while (hasMoreDates) {
+                            var colName = "date" + count;
+                            var currentDate = d[colName];
+
+                            if (currentDate === null || currentDate == "") {
+                                hasMoreDates = false;
+                            } else {
+                                dates.push(currentDate);
+                                count += 1;
+                            }
+                        }
+
+                        var dataArray = [keywordType, sentiment, totalRetweets, totalFavorites, totalPopularity, topTweets, topRetweets, topFavorites, topPopularity, dates, companyName];
+
+                        keywordToDataMap.set(keyword, dataArray);
+                    });
+                }
+
+                companyToFinalDataMap.set(companyName, keywordToDataMap);
+
+                console.log("GOOD COMPANY ", companyToFinalDataMap);
+                console.log("END");
             });
+
         }
     }
-    console.log(companyToFinalDataMap);
-    $.getScript("js/vis.js", updateSentiView);
+    return companyToFinalDataMap;
 }
+
 
 // Parses csv to get tweet data
 function addDataToHashMapFromCSV(companyName, tweetsData) {
     //Get the values for tweetDataByCompany
-    var keywordToDataMap = new LinkedHashMap();
-    tweetsData.map(function (d) {
+    var keywordToDataMap = new Map();
+    var maxCount = NUM_BUBBLES / currentNumberOfCompanies;
+    var rowcount = 0;
+    console.log("TWEETS DATA", tweetsData);
 
-        var keyword = d.keyword;
+    for (var i = 0; i < tweetsData.length && i < maxCount; i++) {
+        currentRow = tweetsData[i];
+        [currentRow].map(function (d) {
+            var keyword = d.keyword;
 
-        var keywordType = d.keywordType;
-        var sentiment = d.avgSentiment;
-        var totalRetweets = d.totalRT;
-        var totalFavorites = d.totalFav;
-        var totalPopularity = d.totalPop;
-        var topTweets = d.topTweet;
-        var topRetweets = d.topRT;
-        var topFavorites = d.topFav;
-        var topPopularity = d.topPop;
-        var dates = [];
+            var keywordType = d.keywordType;
+            var sentiment = d.avgSentiment;
+            var totalRetweets = d.totalRT;
+            var totalFavorites = d.totalFav;
+            var totalPopularity = d.totalPop;
+            var topTweets = d.topTweet;
+            var topRetweets = d.topRT;
+            var topFavorites = d.topFav;
+            var topPopularity = d.topPop;
+            var dates = [];
 
-        var hasMoreDates = true;
-        var count = 0;
-        while (hasMoreDates) {
-            var colName = "date" + count;
-            var currentDate = d[colName];
+            var hasMoreDates = true;
+            var count = 0;
+            while (hasMoreDates) {
+                var colName = "date" + count;
+                var currentDate = d[colName];
 
-            if (currentDate === null || currentDate == "") {
-                hasMoreDates = false;
-            } else {
-                dates.push(currentDate);
-                count += 1;
+                if (currentDate === null || currentDate == "") {
+                    hasMoreDates = false;
+                } else {
+                    dates.push(currentDate);
+                    count += 1;
+                }
             }
-        }
 
-        var dataArray = [keywordType, sentiment, totalRetweets, totalFavorites, totalPopularity, topTweets, topRetweets, topFavorites, topPopularity, dates, companyName];
+            var dataArray = [keywordType, sentiment, totalRetweets, totalFavorites, totalPopularity, topTweets, topRetweets, topFavorites, topPopularity, dates, companyName];
 
-        keywordToDataMap.put(keyword, dataArray);
-    });
-    companyToFinalDataMap.put(companyName, keywordToDataMap);
+            keywordToDataMap.set(keyword, dataArray);
+        });
+    }
+
+    companyToFinalDataMap.set(companyName, keywordToDataMap);
+    console.log("GOOD COMPANY ", companyToFinalDataMap);
 }
 
 //Given a keyword, return an array containing the dates for that company
-function getDatesFromHashMap(keyword, company) {
+function getDatesFromHashMap(companyToFinalDataMap, keyword, company) {
     var keywordToDataMap = companyToFinalDataMap.get(company);
     return keywordToDataMap.get(keyword)[9];
 }
 
-function getDataFromHashMap(keyword, company) {
+function getDataFromHashMap(companyToFinalDataMap, keyword, company) {
     var keywordToDataMap = companyToFinalDataMap.get(company);
-    return keywordToDataMap.get(keyword);
+    console.log("YEIHIHUHUHH", keywordToDataMap);
+    console.log("HSFIJAIJBFBFB", keywordToDataMap.get(keyword));
 }
 
 function parseDateAsInt(date) {
@@ -74,56 +132,6 @@ function parseDateAsInt(date) {
     return toReturn;
 }
 
-// Scans through the data, makes 'buckets' for each bubble (keyword),
-// and aggregates the data for each bubble (keyword).
-function initializeTweetsViewWithData() {
-
-    var myLength = selectedCompanies.length;
-
-    console.log("MY START DATE", myStartDate);
-    console.log("MY END DATE ", myEndDate);
-
-    for (var i = 0; i < myLength; i++) {
-        company = selectedCompanies[i];
-        var dateToDataMap = companyToFinalDataMap.get(company);
-        var keyset = dateToDataMap.getAllKeys();
-
-        // for every date between these two
-        var keysetLength = keyset.length;
-        for (var i = 0; i < keysetLength; i++) {
-
-            var date = keyset[i];
-            //console.log("SKIP DATE", myStartDate, myEndDate, date);
-            if (date > myStartDate && date < myEndDate) {
-                //doodle through until you get to the end date
-                //console.log("DO THE DO");
-                var data = dateToDataMap.get(date);
-                var currentKeyword = data[0];
-
-                if (keywordToDataMap.hasValue(currentKeyword)) {
-                    // add new entry
-                    keywordToDataMap.put(currentKeyword, [data[1], data[2], data[6], data[7], data[8], 1.0]);
-                    //console.log("New Jack", keywordToDataMap);
-                } else {
-                    aggregatedData = keywordToDataMap.get(currentKeyword);
-
-                    //modify the current entry
-
-                    newCount = aggregatedData[5] + 1.0;
-                    newSentiment = (data[2] + aggregatedData[1]) / newCount;
-                    newRT = data[6] + aggregatedData[2];
-                    newFav = data[7] + aggregatedData[3];
-                    newPop = data[8] + aggregatedData[4];
-
-                    keywordToDataMap.put(currentKeyword, [data[1], newSentiment, newRT, newFav, newPop, newCount]);
-                    //console.log("Alligatorate Jack", keywordToDataMap);
-                }
-            } else if (date > endDate) {
-                break;
-            }
-        }
-    }
-}
 
 // Creates the Twitter Cluster View. Code from http://bl.ocks.org/mbostock/7882658
 function loadClusterView() {

@@ -2,7 +2,6 @@ var stockFinalData = [];
 var magnetFinalData = [];
 var selectedCompanies = [];
 var currentDisplayedKeywords = [];
-var companyToFinalDataMap = new Map();
 
 var selectedModeTag;
 var selectedModeName;
@@ -151,7 +150,9 @@ function loadTweetsView() {
 
     console.log("Selected Start Date:", startDate + "\nSelected End Date:", endDate);
 
-    $.getScript("js/tweetsView.js", loadTwitterData);
+    var hashtable = $.getScript("js/tweetsView.js", loadTwitterData);
+    console.log("HASH MASH", hashtable);
+    $.getScript("js/vis.js", updateSentiView(hashtable));
 }
 
 function addCompany(companyName, index) {
