@@ -236,28 +236,14 @@
             key: "sherlock",
             file: "Apple_final.csv",
             name: "The Adventures of Steve Jobs"
-    }, {
-            key: "aesop",
-            file: "top_aesop.csv",
-            name: "Aesop's Fables"
-    }, {
-            key: "alice",
-            file: "alice.csv",
-            name: "Alice's Adventures in Wonderland"
-    }, {
-            key: "gulliver",
-            file: "top_gulliver.csv",
-            name: "Gulliver's Travels"
-    }
-  ];
+        }
+    ];
 
     $(function () {
         console.log("hey");
         var display, key, plot, text;
         plot = Bubbles();
-        display = function (data) {
-            return plotData("#vis", data, plot);
-        };
+
         key = decodeURIComponent(location.search).replace("?", "");
         text = texts.filter(function (t) {
             return t.key === key;
@@ -274,8 +260,32 @@
             location.replace("#");
             return location.search = encodeURIComponent(key);
         });
-        d3.select("#book-title").html(text.name);
-        return d3.csv("data/twitter/" + text.file, display);
+        data = loadSentimentData();
+        console.log("databetaman", data);
+        display = plotData("#vis", data, plot);
     });
 
 }).call(this);
+
+function updateSentiView() {
+
+}
+
+function loadSentimentData() {
+    var bubblesToPlot = [];
+    var myLength = selectedCompanies.length;
+    for (var i = 0; i < myLength; i++) {
+        companyName = selectedCompanies[i];
+        var keywordToDataMap = companyToFinalDataMap.get(companyName);
+        var keyset = keywordToDataMap.getAllKeys();
+        for (var j = 0; j < NUM_BUBBLES / myLength && j < keyset.length; j++) {
+            currentKeyword = keyset[j];
+            var currentKeywordData = getDataFromHashMap(currentKeyword, companyName);
+            //            console.log(currentKeywordData);
+            bubblesToPlot.push(currentKeywordData);
+
+        }
+        console.log(bubblesToPlot);
+    }
+    return bubblesToPlot;
+}

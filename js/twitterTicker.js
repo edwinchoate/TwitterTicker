@@ -41,6 +41,7 @@ var currentNumberOfCompanies = 0;
 var SHOW_LEGEND = true;
 var MAX_NUM_COMPANIES = 5;
 var NO_TWITTER_VIEW_SELECTED = "No Twitter View Selected";
+var NUM_BUBBLES = 200;
 
 $(document).ready(function () {
 
@@ -138,8 +139,9 @@ function loadTweetsView() {
     endDate = Date.parse(unparsedEndDate);
 
     console.log("Selected Start Date:", startDate + "\nSelected End Date:", endDate);
-    
+
     $.getScript("js/tweetsView.js", loadTwitterData);
+    initializeSentiView();
 }
 
 function addCompany(companyName, index) {
@@ -319,5 +321,4 @@ function displayTwitterVis() {
             $("#cluster-view").fadeIn(650);
             break;
     }
-
 }

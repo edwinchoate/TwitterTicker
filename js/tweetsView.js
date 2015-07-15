@@ -1,6 +1,5 @@
 //Changes the tweet view when a company is added or removed.
 function loadTwitterData() {
-
     var myLength = selectedCompanies.length;
     for (var i = 0; i < myLength; i++) {
         companyName = selectedCompanies[i];
@@ -54,7 +53,13 @@ function addDataToHashMapFromCSV(companyName, tweetsData) {
 
 //Given a keyword, return an array containing the dates for that company
 function getDatesFromHashMap(keyword, company) {
-    return companyToFinalDataMap.get[9];
+    var keywordToDataMap = companyToFinalDataMap.get(company);
+    return keywordToDataMap.get(keyword)[9];
+}
+
+function getDataFromHashMap(keyword, company) {
+    var keywordToDataMap = companyToFinalDataMap.get(company);
+    return keywordToDataMap.get(keyword);
 }
 
 function parseDateAsInt(date) {
@@ -121,9 +126,6 @@ function initializeTweetsViewWithData() {
 function loadSentiView() {
     $.getScript("js/vis.js", this);
 }
-
-
-
 
 // Creates the Twitter Cluster View. Code from http://bl.ocks.org/mbostock/7882658
 function loadClusterView() {
