@@ -109,7 +109,7 @@ function render(id, fData) {
             .attr('cx', function (d) {
                 // current loc
                 var x = d.x
-                    ////console.log("X boys", x);
+                    console.log("X boys", x);
                 keys.forEach(function (key) {
                     if (key.active == true) {
                         var val = key.keyword
@@ -117,11 +117,11 @@ function render(id, fData) {
                             // get the difference in distance
                         var deltaX = key.x - x
                             // get the force scalar
-                            //console.log("KEY MIN, KEY MAX", key.min, key.max);
+                            console.log("KEY MIN, KEY MAX", key.min, key.max);
                         var scale = d3.scale.linear().domain([key.min, key.max]).range([0.1, 0.9])
                         var force = scale(dustVal)
                         x += deltaX * force
-                            //console.log("X men", x, force, deltaX);
+                            console.log("X men", x, force, deltaX);
                     }
 
                 })

@@ -151,7 +151,7 @@ function loadClusterView(clusterData) {
             height = 400,
             padding = 1.5, // separation between same-color nodes
             clusterPadding = 6, // separation between different-color nodes
-            maxRadius = 40;
+            maxRadius = 55;
 
         var n = 200, // total number of nodes
             m = 6; // number of distinct clusters (number of companies)
@@ -164,6 +164,7 @@ function loadClusterView(clusterData) {
         var nodes = [];
         var clusters = new Array(m);
         var maxPop = clusterData[0].totalPop;
+        var minPop = clusterData[n-1].totalPop;
 
         //console.log("mex pap", clusterData[0]);
         if(typeof maxPop === "undefined") {
@@ -190,10 +191,10 @@ function loadClusterView(clusterData) {
                 //console.log(myCompany);
                 clusterVal = selectedCompanies.indexOf(myCompany);
 
-                var r = getMappedValue(myPop, 0, maxPop, 1, maxRadius);
+                var r = Math.abs(getMappedValue(myPop, minPop, maxPop, 1, maxRadius));
 
                 // console.log("SWERT", swert);
-                console.log("RADIUS", r);
+                //console.log("RADIUS", r);
                 var d = {
                     cluster: clusterVal,
                     radius: r,
@@ -212,7 +213,7 @@ function loadClusterView(clusterData) {
                 hasMoreData = false;
             }
         }
-        console.log("clusters", clusters);
+        //console.log("clusters", clusters);
 
         // Use the pack layout to initialize node positions.
         d3.layout.pack()
