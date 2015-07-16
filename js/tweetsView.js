@@ -148,7 +148,7 @@ function loadClusterView(clusterData) {
     if (selectedCompanies.length > 0) {
 
         var width = 500,
-            height = 330,
+            height = 400,
             padding = 1.5, // separation between same-color nodes
             clusterPadding = 6, // separation between different-color nodes
             maxRadius = 40;
@@ -164,6 +164,7 @@ function loadClusterView(clusterData) {
         var nodes = [];
         var clusters = new Array(m);
         var maxPop = clusterData[0].totalPop;
+
         //console.log("mex pap", clusterData[0]);
         if(typeof maxPop === "undefined") {
             maxPop = 1;
@@ -173,7 +174,7 @@ function loadClusterView(clusterData) {
         var myPop = 1;
         var clusterVal = 0;
         var hasMoreData = true;
-
+        var topRetweets = 0;
         for (var i = 0; i < n && hasMoreData; i++) {
 
             data = clusterData[i];
@@ -181,6 +182,11 @@ function loadClusterView(clusterData) {
                 //console.log("DATA", data);
                 myCompany = data.company;
                 myPop = data.totalPop;
+                mytopTweet = data.topTweet;
+                topRetweets = data.topRT;
+                topFavorites  = data.topFav;
+                totalRetweets = data.totalRT;
+                totalFavorites = data.totalFav;
                 //console.log(myCompany);
                 clusterVal = selectedCompanies.indexOf(myCompany);
 
@@ -191,6 +197,11 @@ function loadClusterView(clusterData) {
                 var d = {
                     cluster: clusterVal,
                     radius: r,
+                    topTweet: mytopTweet,
+                    topRT: topRetweets,
+                    topFav: topFavorites,
+                    totalRT: totalRetweets,
+                    totalFav: totalFavorites,
                     company: myCompany,
                     keyword: data.keyword
                 }
@@ -223,17 +234,28 @@ function loadClusterView(clusterData) {
 
         var force = d3.layout.force()
             .nodes(nodes)
-            .size([width * 1.85, height * 1.5])
+            .size([width * 1.45, height * 1.5])
             .gravity(.02)
             .charge(0)
             .on("tick", tick)
             .start();
 
+         /**
+         * Funtion to handle tooltips over the dust
+         */
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function (d) {
+                console.log(d);
+                return "<strong>" + getKeywordTitle(d) + "</strong>";
+            });
+
         var svg = d3.select("#cluster-view").append("svg")
             .attr("width", width)
             .attr("height", height);
 
-        var node = svg.selectAll("circle")
+        var node = svg.selectAll("g circle")
             .data(nodes)
             .enter().append("circle")
             .attr('fill', function (d) {
@@ -260,8 +282,21 @@ function loadClusterView(clusterData) {
                         return "#55acee";
                 }
             })
-            .call(force.drag);
-            
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide);
+
+            node.call(force.drag);
+            node.call(tip);
+
+        node.append("text")
+            .text(function(d){
+                var returnValue = "";
+                if(d.radius > 25) {
+                    returnValue = d.keyword;
+                }
+                return returnValue;
+            });
+
         node.transition()
             .duration(750)
             .delay(function (d, i) {
@@ -283,44 +318,21 @@ function loadClusterView(clusterData) {
                 })
                 .attr("cy", function (d) {
                     return d.y;
-                });
+                })
         }
 
         function getKeywordTitle(d) {
-            switch (d.keyword) {
-                case "avgSentiment":
-                    return "Average Sentiment Score";
-                    break;
-                case "totalRT":
-                    return "Total Retweets";
-                    break;
-                case "totalFav":
-                    return "Total Favorites";
-                    break;
-                default:
-                    $("#tweet-display").text(d.company + ": " + d.topTweet);
-                    $("#num-retweets-display").text(d.topRT);
-                    $("#num-favorites-display").text(d.topFav);
-                    return d.keyword + "<hr>" +
-                        "Company: " + d.company + "<br><br>" +
-                        "Top <i class=\"fa fa-retweet\"></i>'s: " + d.topRT + "<br>" +
-                        "Top <i class=\"fa fa-star\"></i>'s: " + d.topFav + "<br><br>" +
-                        "Total <i class=\"fa fa-retweet\"></i>'s: " + d.totalRT + "<br>" +
-                        "Total <i class=\"fa fa-star\"></i>'s: " + d.totalFav + "<br>";
-            }
+            $("#tweet-display").text(d.company + ": " + d.topTweet);
+            $("#num-retweets-display").text("\n" +d.topRT);
+            $("#num-favorites-display").text(d.topFav);
+            return d.keyword + "<hr>" +
+                "Top <i class=\"fa fa-retweet\"></i>'s: " + d.topRT + "<br>" +
+                "Top <i class=\"fa fa-star\"></i>'s: " + d.topFav + "<br><br>" +
+                "Total <i class=\"fa fa-retweet\"></i>'s: " + d.totalRT + "<br>" +
+                "Total <i class=\"fa fa-star\"></i>'s: " + d.totalFav + "<br>";
         }
 
-        /**
-         * Funtion to handle tooltips over the dust
-         */
-        var tip = d3.tip()
-            .attr('class', 'd3-tip')
-            .offset([-10, 0])
-            .html(function (d) {
-                ////console.log(d);
-                return "<strong>" + getKeywordTitle(d) + "</strong>";
-            })
-
+       
         // Move d to be adjacent to the cluster node.
         function cluster(alpha) {
             return function (d) {
