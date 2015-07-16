@@ -95,6 +95,9 @@ $(document).ready(function () {
             currentCompany.removeClass("selected");
             if (selectedCompanies.length <= 1) {
                 $("#please").fadeIn(650);
+                $("#tweet-display").text("No tweet is selected.");
+                $("#num-retweets-display").text("0");
+                $("#num-favorites-display").text("0");
             }
             selectedCompanies.splice(index, 1);
             removeCompany(currentCompanyName, index);
