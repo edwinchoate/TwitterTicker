@@ -15,7 +15,7 @@ function render(id, fData) {
 
     function parseDateAsInt(date) {
         var toReturn = "";
-        if (typeof date === 'string' || date !== null) {
+        if ((typeof date === 'string' || date !== null) && typeof date !== "undefined") {
             var parts = date.split('/');
             var myDate = parts[1] + "/" +parts[0] + "/" + parts[2];
             toReturn = myDate;
