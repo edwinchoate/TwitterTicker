@@ -183,7 +183,7 @@ void aggregate() {
     if (keywordMap.containsKey(keyword)) {
       // do the aggregation
       ArrayList<Object> data = keywordMap.get(keyword);
-
+      //println("Data" + data);
       int newCount = 1 + (Integer)data.get(10);
 
       double newAverageSentiment = (sentiment + (Double)data.get(1)) / (double)newCount;
@@ -196,6 +196,7 @@ void aggregate() {
       int topTweetRT = (Integer)data.get(6);
       int topTweetFav = (Integer)data.get(7);
       int topTweetPop = (Integer)data.get(8);
+      String cDate = (String)data.get(9);
 
       //if the new tweet is more popular, use it as the top tweet
       if (popularity > topTweetPop) {
@@ -203,11 +204,11 @@ void aggregate() {
         topTweetRT = retweets;
         topTweetFav = favorites;
         topTweetPop = popularity;
+        cDate = date;
       }
 
       //add the current date to the date list
-      ArrayList<String> keywordDates = (ArrayList<String>)data.get(9);
-      keywordDates.add(date);
+      println(cDate);
 
       //NOW FINALLY add in the new data over the old data.... argh idk if this was necessary or if i should
       //have just modified the old list whatever zero hour YOLO
@@ -223,10 +224,10 @@ void aggregate() {
       newData.add(topTweetRT);
       newData.add(topTweetFav);
       newData.add(topTweetPop);
-
-      newData.add(keywordDates);
+     
+       //newData.add(keywordDates);
+      newData.add(cDate);
       newData.add(newCount);
-
       keywordMap.put(keyword, newData);
     } else {
       ArrayList<Object> data = new ArrayList<Object>();
@@ -243,13 +244,8 @@ void aggregate() {
       data.add(popularity);
 
       //add in dates arraylist, for our separate dates table
-      ArrayList<String> keywordDates = new ArrayList<String>();
-      keywordDates.add(date);
-      data.add(keywordDates);
-
-      //add the count
+      data.add(date);
       data.add(1);
-
       keywordMap.put(keyword, data);
     }
   }
@@ -365,6 +361,7 @@ void recordKeywordsAndDates(String[] keys) {
   keyword_data_table.addColumn("topRT");
   keyword_data_table.addColumn("topFav");
   keyword_data_table.addColumn("topPop");
+  keyword_data_table.addColumn("date");
   
   Table keyword_dates_table = new Table();
   
@@ -382,7 +379,7 @@ void recordKeywordsAndDates(String[] keys) {
     String topRT = myData.get(6) + "";
     String topFav = myData.get(7) + "";
     String topPop = myData.get(8) + "";
-    ArrayList<String> dates = (ArrayList<String>)myData.get(9);
+    String date = myData.get(9) + "";
     
     //write keyword data to CSV
     keyword_data_table.setString(i, "keyword", thisKey);
@@ -396,17 +393,14 @@ void recordKeywordsAndDates(String[] keys) {
     keyword_data_table.setString(i, "topFav", topFav);
     keyword_data_table.setString(i, "topPop", topPop);
     
+    keyword_data_table.setString(i, "date", date);
     //write dates data to another CSV. top of the column is the key,
     //going down the column are the dates that keyword was used
-    keyword_dates_table.setString(i, 0, thisKey);
-    for(int j = 0; j < dates.size(); j++){
-      String currentDate = dates.get(j);
-      keyword_dates_table.setString(i, j + 1, currentDate);
-    }
+    //keyword_dates_table.setString(i, 0, thisKey);
+    
   }
   
   println("Done Aggregating!");
-  saveTable(keyword_data_table, "../../data/twitter/" + filename + "_keyword_data.csv");
-  saveTable(keyword_dates_table, "../../data/twitter/" + filename + "_keyword_dates.csv");  
+  saveTable(keyword_data_table, "../../data/" + filename + "_keyword_data.csv");
+  saveTable(keyword_dates_table, "../../data/" + filename + "_keyword_dates.csv");  
 }
-

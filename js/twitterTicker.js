@@ -157,7 +157,7 @@ function loadTweetsView() {
 
     //    var hashtable = $.getScript("js/tweetsView.js", loadTwitterData);
     //    console.log("HASH MASH", hashtable);
-    $.getScript("js/vis.js", renderSentiView);
+    //$.getScript("js/vis.js", renderSentiView);
 }
 
 function addCompany(companyName, index) {
@@ -308,7 +308,7 @@ function initializeTweetsView() {
 
 function initializeMagnetView(companyName, index) {
     // Initializes Dust and Magnets part of vis
-    $("#senti-view, #cluster-view").hide();
+    $("#cluster-view").hide();
 
 }
 

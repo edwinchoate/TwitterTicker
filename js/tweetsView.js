@@ -123,11 +123,11 @@ function getDataFromHashMap(companyToFinalDataMap, keyword, company) {
 }
 
 function parseDateAsInt(date) {
-    var toReturn = new Date(null);
+    var toReturn = "";
     if (typeof date === 'string' || date !== null) {
         var parts = date.split('/');
-        var myDate = new Date(parts[2], parts[0] - 1, parts[1]);
-        toReturn = Date.parse(myDate);
+        var myDate = parts[1] + "/" +parts[0] + "/" + parts[2];
+        toReturn = myDate;
     }
     return toReturn;
 }
@@ -179,6 +179,7 @@ function loadClusterView(clusterData) {
         for (var i = 0; i < n && hasMoreData; i++) {
 
             data = clusterData[i];
+
             if(typeof data !== "undefined") {
                 //console.log("DATA", data);
                 myCompany = data.company;
@@ -188,6 +189,9 @@ function loadClusterView(clusterData) {
                 topFavorites  = data.topFav;
                 totalRetweets = data.totalRT;
                 totalFavorites = data.totalFav;
+                currentDateToDisplay = data.date;
+                console.log(currentDateToDisplay);
+                officialDate = parseDateAsInt(currentDateToDisplay);
                 //console.log(myCompany);
                 clusterVal = selectedCompanies.indexOf(myCompany);
 
@@ -204,7 +208,8 @@ function loadClusterView(clusterData) {
                     totalRT: totalRetweets,
                     totalFav: totalFavorites,
                     company: myCompany,
-                    keyword: data.keyword
+                    keyword: data.keyword,
+                    date: officialDate
                 }
                 if (!clusters[clusterVal] || (r > clusters[clusterVal].radius)) clusters[clusterVal] = d;
                 nodes.push(d);
@@ -235,7 +240,7 @@ function loadClusterView(clusterData) {
 
         var force = d3.layout.force()
             .nodes(nodes)
-            .size([width * 1.45, height * 1.5])
+            .size([width * 1.6, height * 1.5])
             .gravity(.02)
             .charge(0)
             .on("tick", tick)
@@ -327,6 +332,8 @@ function loadClusterView(clusterData) {
             $("#num-retweets-display").text("\n" +d.topRT);
             $("#num-favorites-display").text(d.topFav);
             return d.keyword + "<hr>" +
+                "Company: " + d.company + "<br>" +
+                "Date: " +d.date + "<br><br>" +
                 "Top <i class=\"fa fa-retweet\"></i>'s: " + d.topRT + "<br>" +
                 "Top <i class=\"fa fa-star\"></i>'s: " + d.topFav + "<br><br>" +
                 "Total <i class=\"fa fa-retweet\"></i>'s: " + d.totalRT + "<br>" +

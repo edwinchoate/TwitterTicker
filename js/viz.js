@@ -12,6 +12,17 @@ function render(id, fData) {
     var dustRadius = 5
     var magnetRadius = 20
 
+
+    function parseDateAsInt(date) {
+        var toReturn = "";
+        if (typeof date === 'string' || date !== null) {
+            var parts = date.split('/');
+            var myDate = parts[1] + "/" +parts[0] + "/" + parts[2];
+            toReturn = myDate;
+        }
+        return toReturn;
+    }
+
     // get properties of the data
     var props = new Array()
     var p = fData[0]
@@ -48,6 +59,7 @@ function render(id, fData) {
     })
 
     function getKeywordTitle(d) {
+        currentDateDisplayable = parseDateAsInt(d.date);
         switch (d.keyword) {
             case "avgSentiment":
                 return "Average Sentiment Score";
@@ -63,7 +75,8 @@ function render(id, fData) {
                 $("#num-retweets-display").text(d.topRT);
                 $("#num-favorites-display").text(d.topFav);
                 return d.keyword + "<hr>" +
-                    "Company: " + d.company + "<br><br>" +
+                    "Company: " + d.company + "<br>" +
+                    "Date: " +currentDateDisplayable + "<br><br>" +
                     "Top <i class=\"fa fa-retweet\"></i>'s: " + d.topRT + "<br>" +
                     "Top <i class=\"fa fa-star\"></i>'s: " + d.topFav + "<br><br>" +
                     "Total <i class=\"fa fa-retweet\"></i>'s: " + d.totalRT + "<br>" +
