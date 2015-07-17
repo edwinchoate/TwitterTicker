@@ -131,7 +131,6 @@ svg rect.extent {
   }
 }
 #company-selector {
-  overflow-y: scroll;
   max-height: 250px;
   overflow: -moz-scrollbars-vertical;
 }
