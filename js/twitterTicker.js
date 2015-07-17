@@ -157,7 +157,7 @@ function loadTweetsView() {
 
     //    var hashtable = $.getScript("js/tweetsView.js", loadTwitterData);
     //    console.log("HASH MASH", hashtable);
-    $.getScript("js/vis.js", renderSentiView);
+    //$.getScript("js/vis.js", renderSentiView);
 }
 
 function addCompany(companyName, index) {
@@ -170,7 +170,7 @@ function addCompany(companyName, index) {
     }
 
     addCompanyToMagnetView(companyName, index);
-    // addCompanyToSentiView(companyName, index);
+    addCompanyToSentiView(companyName, index);
     addCompanyToClusterView(companyName, index);
 
     console.log(stockFinalData);
@@ -184,7 +184,7 @@ function removeCompany(companyName, index) {
 
     removeCompanyFromMagnetView(companyName, index);
     removeCompanyFromClusterView(companyName, index);
-    // removeCompanyFromSentiView(companyName, index);
+    removeCompanyFromSentiView(companyName, index);
 
 }
 
@@ -303,6 +303,7 @@ function initializeTweetsView() {
 
     // Init Magnet View and hide it
     initializeMagnetView();
+    intializeSentiView();
     initializeClusterView();
 }
 
@@ -371,7 +372,7 @@ function addCompanyToSentiView(companyName, index) {
             sentiData = sentiData.concat(sentiFinalData[i].slice(0, NUM_BUBBLES / myLength));
         }
         $("#senti-view").empty();
-        $.getScript("js/viz.js", render('#senti-view', sentiData));
+        loadSentiView(sentiFinalData);
     });
 
     console.log("magnetFinalData:", sentiFinalData);
@@ -405,6 +406,110 @@ function removeCompanyFromMagnetView(companyName, index) {
         $.getScript("js/viz.js", render('#magnet-view', magnetData));
     } else {
         $("#magnet-view").empty();
+    }
+}
+
+
+function getMappedValue(value, leftMin, leftMax, rightMin, rightMax ) {
+    // Figure out how 'wide' each range is
+    leftSpan = leftMax - leftMin
+    rightSpan = rightMax - rightMin
+
+    // Convert the left range into a 0-1 range (float)
+    valueScaled = (value - leftMin)/leftSpan;
+
+    // Convert the 0-1 range into a value in the right range.
+    return rightMin + (valueScaled * rightSpan)
+}
+// Creates the Twitter Cluster View. Code from http://bl
+
+function loadSentiView (data) {
+    // register our custom symbols to nvd3
+    // make sure your path is valid given any size because size scales if the chart scales.
+    nv.utils.symbolMap.set('thin-x', function(size) {
+        size = Math.sqrt(size);
+        return 'M' + (-size/2) + ',' + (-size/2) +
+                'l' + size + ',' + size +
+                'm0,' + -(size) +
+                'l' + (-size) + ',' + size;
+    });
+
+    // create the chart
+    var chart;
+    nv.addGraph(function() {
+        chart = nv.models.scatterChart()
+            .showDistX(true)
+            .showDistY(true)
+            .useVoronoi(true)
+            //.color(d3.scale.category10().range())
+            .duration(300)
+        ;
+        chart.dispatch.on('renderEnd', function(){
+            console.log('render complete');
+        });
+
+        chart.xAxis.tickFormat(d3.format('.02f'));
+        chart.yAxis.tickFormat(d3.format('.02f'));
+
+        d3.select('#test1 svg')
+            .datum(randomData(selectedCompanies.length, data))
+            .attr('fill', function (d) {
+                switch (d.company) {
+                    case "Amazon":
+                        return companyColors.Amazon;
+                        break;
+                    case "Apple":
+                        return companyColors.Apple;
+                        break;
+                    case "Intel":
+                        return companyColors.Intel;
+                        break;
+                    case "IBM":
+                        return companyColors.IBM;
+                        break;
+                    case "Microsoft":
+                        return companyColors.Microsoft;
+                        break;
+                    case "Google":
+                        return companyColors.Google;
+                        break;
+                    default:
+                        return "#55acee";
+                }
+            })
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+
+        chart.dispatch.on('stateChange', function(e) { ('New State:', JSON.stringify(e)); });
+        return chart;
+    });
+
+
+    function randomData(groups, scatterData) { //# groups,# points per group
+        console.log("SCATTER DATA", scatterData);
+        var data = [],
+            shapes = ['thin-x', 'circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'];
+        
+        for (var i = 0; i < groups; i++) {
+            data.push({
+                key: selectedCompanies[i],
+                values: []
+            });
+            console.log("IM HERE", data);
+            for (var j = 0; j < 200; j++) {
+
+                console.log("SCATTER DATA", scatterData);
+                console.log("HERE", scatterData[0][j]["totalPop"]);
+                data[i].values.push({
+                    x: getMappedValue(scatterData[0][j]["totalPop"], scatterData[0][199]["totalPop"], scatterData[0][0]["totalPop"], 500, 350),
+                    y: getMappedValue(scatterData[0][j]["avgSentiment"], scatterData[0][199]["avgSentiment"], scatterData[0][0]["avgSentimetn"], 500, 350),
+                    size: .75,
+                    shape: shapes[j % shapes.length]
+                });
+            }
+        }
+        return data;
     }
 }
 

@@ -1,33 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <link href="../build/nv.d3.css" rel="stylesheet" type="text/css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
-    <script src="../build/nv.d3.js"></script>
-
-    <style>
-        text {
-            font: 12px sans-serif;
-        }
-        svg {
-            display: block;
-        }
-        html, body, #test1, svg {
-            margin: 0px;
-            padding: 0px;
-            height: 100%;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
-
-<div id="test1" class='with-3d-shadow with-transitions'>
-    <svg></svg>
-</div>
-
-<script>
+function loadSentiView () {
 
     // register our custom symbols to nvd3
     // make sure your path is valid given any size because size scales if the chart scales.
@@ -70,7 +41,7 @@
     function randomData(groups, points) { //# groups,# points per group
         // smiley and thin-x are our custom symbols!
         var data = [],
-            shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
+            shapes = ['thin-x', 'circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
             random = d3.random.normal();
 
         for (i = 0; i < groups; i++) {
@@ -88,10 +59,8 @@
                 });
             }
         }
-        console.log("DATA", data);
+
         return data;
     }
-
-</script>
-</body>
-</html>
+    
+}

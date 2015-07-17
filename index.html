@@ -34,6 +34,22 @@
     <!-- Custom CSS -->
     <link href="css/main.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    
+    <style>
+        text {
+            font: 12px sans-serif;
+        }
+        svg {
+            display: block;
+        }
+        #test1, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    
 </head>
 
 <body>
@@ -144,7 +160,7 @@
                                     <label for="magnet">Magnet View</label>
                                     <br>
                                 </g>
-                                <g id="senti-input jitter">
+                                <g id="senti-input">
                                     <input type="radio" id="senti" name="view-mode">
                                     <label for="senti">Popularity View</label>
                                     <br>
@@ -190,7 +206,9 @@
                                 <div id="magnet-view"></div>
 
                                 <div id="senti-view">
-                                    <div id="vis"></div>
+                                    <div id="test1" class='with-3d-shadow with-transitions'>
+                                        <svg></svg>
+                                    </div>
                                 </div>
 
                                 <div id="cluster-view"></div>
@@ -203,11 +221,97 @@
 
             </div>
 
-        </div>
+        </div>        
         <!-- End of vis -->
-
+            
     </main>
+    <!-- END --
+    <script>
 
+        // register our custom symbols to nvd3
+        // make sure your path is valid given any size because size scales if the chart scales.
+
+        // create the chart
+        var chart;
+        nv.addGraph(function() {
+            chart = nv.models.scatterChart()
+                .showDistX(true)
+                .showDistY(true)
+                .useVoronoi(true)
+                .color(d3.scale.category10().range())
+                .duration(300)
+            ;
+            chart.dispatch.on('renderEnd', function(){
+                console.log('render complete');
+            });
+
+            chart.xAxis.tickFormat(d3.format('.02f'));
+            chart.yAxis.tickFormat(d3.format('.02f'));
+
+            d3.select('#test1 svg')
+                .datum(correctData(4,40))
+                .attr('fill', function (d) {
+                    switch (d.company) {
+                        case "Amazon":
+                            return companyColors.Amazon;
+                            break;
+                        case "Apple":
+                            return companyColors.Apple;
+                            break;
+                        case "Intel":
+                            return companyColors.Intel;
+                            break;
+                        case "IBM":
+                            return companyColors.IBM;
+                            break;
+                        case "Microsoft":
+                            return companyColors.Microsoft;
+                            break;
+                        case "Google":
+                            return companyColors.Google;
+                            break;
+                        default:
+                            return "#55acee";
+                    }
+                })
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+
+            chart.dispatch.on('stateChange', function(e) { ('New State:', JSON.stringify(e)); });
+            return chart;
+        });
+
+
+        function correctData(groups, points) { //# groups,# points per group
+            // smiley and thin-x are our custom symbols!
+            var data = [],
+                shapes = ['circle'],
+                random = d3.random.normal();
+
+            for (i = 0; i < groups; i++) {
+                data.push({
+                    key: 'Group ' + i,
+                    values: []
+                });
+                
+                
+                
+                for (j = 0; j < points; j++) {
+                    data[i].values.push({
+                        x: random(),
+                        y: random(),
+                        size: Math.round(Math.random() * 100) / 100,
+                        shape: shapes[j % shapes.length]
+                    });
+                }
+            }
+            console.log("DATA", data);
+            return data;
+        }
+
+    </script>
+<!--BLCIK-->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="js/jquery.min.js"></script>
 
